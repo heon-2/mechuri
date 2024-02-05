@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Wheel } from 'react-custom-roulette';
+import Select from './Select';
 
 interface Option {
   option: string;
@@ -53,7 +54,7 @@ export default function Roulette() {
   const resetOption = () => {
     const newOptions: Option[] = [];
     while (newOptions.length < 10) {
-      const newPrizeNumber = Math.floor(Math.random() * options.length);
+      const newPrizeNumber = Math.floor(Math.random() * data.length);
       if (!newOptions.includes(data[newPrizeNumber])) {
         newOptions.push(data[newPrizeNumber]);
       }
@@ -95,24 +96,43 @@ export default function Roulette() {
   };
 
   return (
-    <div>
-      <Wheel
-        mustStartSpinning={mustSpin}
-        prizeNumber={prizeNumber}
-        data={options}
-        onStopSpinning={handleStopSpinning}
-      />
-      <div>
-        <button onClick={handleSpinClick}>SPIN</button>
+    <div className="grid grid-cols-4 gap-4 items-center justify-center">
+      <div className="flex justify-center items-center">
+        <Select></Select>
       </div>
-      <div>
-        <button onClick={resetOption}>RESET</button>
+      <div className="col-span-2 flex flex-col items-center justify-center">
+        <Wheel
+          mustStartSpinning={mustSpin}
+          prizeNumber={prizeNumber}
+          data={options}
+          onStopSpinning={handleStopSpinning}
+        />
+        <div className="justify-around mt-4">
+          <button
+            onClick={handleSpinClick}
+            className="bg-blue-500 text-white px-5 py-2 rounded-md mr-2 ml-2"
+          >
+            SPIN
+          </button>
+          <button onClick={resetOption} className="bg-red-500 text-white px-4 py-2 rounded-md ">
+            RESET
+          </button>
+        </div>
       </div>
-      <div>
-        <button onClick={handleAddClick}>ADD</button>
-      </div>
-      <div>
-        <button onClick={handleRemoveClick}>REMOVE</button>
+      <div className="flex justify-center items-center">
+        <button
+          onClick={handleRemoveClick}
+          className="bg-green-500 text-white px-4 py-2 rounded-md mr-2 text-2xl"
+        >
+          -
+        </button>
+        <p className="mr-2 text-2xl">{options.length}/12</p>
+        <button
+          onClick={handleAddClick}
+          className="bg-yellow-500 text-white px-4 py-2 rounded-md text-2xl"
+        >
+          +
+        </button>
       </div>
       {result && <p>결과: {result.option}</p>}
     </div>
