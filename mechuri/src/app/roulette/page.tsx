@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { Wheel } from 'react-custom-roulette';
 import Select from './Select';
+import ResultModal from '@/components/roulette/ResultModal';
 
-interface Option {
+export interface Option {
   option: string;
 }
 
@@ -38,6 +39,7 @@ export default function Roulette() {
   const [mustSpin, setMustSpin] = useState<boolean>(false);
   const [prizeNumber, setPrizeNumber] = useState<number>(0);
   const [result, setResult] = useState<Option | null>(null);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     resetOption();
@@ -68,6 +70,7 @@ export default function Roulette() {
   const handleStopSpinning = () => {
     setResult(options[prizeNumber]);
     setMustSpin(false);
+    setModalOpen(true);
   };
 
   const handleAddClick = () => {
@@ -134,6 +137,9 @@ export default function Roulette() {
           +
         </button>
       </div>
+      {result && modalOpen && (
+        <ResultModal result={result} onClose={() => setModalOpen(false)}></ResultModal>
+      )}
       {result && <p>결과: {result.option}</p>}
     </div>
   );
