@@ -1,10 +1,11 @@
 import React from 'react';
-import NavBar  from '@/components/commons/NavBar'
+import NavBar from '@/components/commons/NavBar';
+import LandingPage from '@/components/main/LandingPage';
 export default function Page() {
-    return (
-        <div>
-            <NavBar/>
-            메인페이지입니다.
-        </div>
-    );
-};
+  return (
+    <div>
+      <NavBar />
+      <LandingPage />
+    </div>
+  );
+}
