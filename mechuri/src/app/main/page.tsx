@@ -1,11 +1,11 @@
 import React from 'react';
 import NavBar from '@/components/commons/NavBar';
-import LandingPage from '@/components/main/LandingPage';
+import MainPage from './MainPage';
 export default function Page() {
   return (
-    <div>
+    <div className="">
       <NavBar />
-      <LandingPage />
+      <MainPage />
     </div>
   );
 }
