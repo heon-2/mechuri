@@ -15,13 +15,14 @@ import {
 interface ResultModalProps {
   onClose: () => void;
   result: Option | null;
+  open: boolean;
 }
 
-export default function ResultModal({ onClose, result }: ResultModalProps) {
+export default function ResultModal({ onClose, result, open }: ResultModalProps) {
   return (
     <div>
-      <AlertDialog>
-        <AlertDialogTrigger>Open</AlertDialogTrigger>
+      <AlertDialog open={open} onOpenChange={onClose}>
+        {/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>오늘의 추천 메뉴는?</AlertDialogTitle>
