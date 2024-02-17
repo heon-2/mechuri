@@ -7,55 +7,48 @@ import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 import Introduce from '@/components/main/Introduce';
+import ChatBot from '@/components/main/ChatBot';
+import FoodChoice from '@/components/main/FoodChoice';
+import FoodMap from '@/components/main/FoodMap';
+import Roulette from '@/components/main/Roulette';
 export default function MainPage() {
   return (
-    <div className="h-full">
+    <div className="flex h-full justify-center w-full">
       <Swiper
         // className="mySwiper"
-        // direction={'vertical'}
+        direction={'vertical'}
         navigation={true}
         mousewheel={true}
-        // effect={'fade'}
+        effect={'fade'}
         pagination={{
           clickable: true,
         }}
+        autoHeight={true}
         modules={[Pagination, EffectFade, Navigation, Mousewheel, Autoplay]}
         // centeredSlides={true}
         autoplay={{
           delay: 5000,
           disableOnInteraction: false,
         }}
-        spaceBetween={50}
-        slidesPerView={1}
+        // spaceBetween={50}
+        // slidesPerView={1}
         onSlideChange={() => console.log('slide change')}
         onSwiper={(swiper) => console.log(swiper)}
       >
-        {/* <SwiperSlide>
-          <Introduce />
-        </SwiperSlide>
         <SwiperSlide>
           <Introduce />
         </SwiperSlide>
         <SwiperSlide>
-          <Introduce />
+          <Roulette />
         </SwiperSlide>
         <SwiperSlide>
-          <Introduce />
+          <FoodChoice />
         </SwiperSlide>
         <SwiperSlide>
-          <Introduce />
-        </SwiperSlide> */}
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
+          <ChatBot />
         </SwiperSlide>
         <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
+          <FoodMap />
         </SwiperSlide>
       </Swiper>
     </div>
