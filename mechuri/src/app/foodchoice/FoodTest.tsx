@@ -1,5 +1,20 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
+import { useState } from 'react';
 export default function FoodTest() {
+  let [step, setStep] = useState(0);
+  let [selected, setSelected] = useState([]);
+
+  // api 테스트 코드
+  useEffect(() => {
+    fetch('/api/foodchoice')
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  }, []);
+
   return (
     <div className="grid grid-rows-5 grid-cols-2 h-full">
       <div className="row-span-1 col-span-2 flex items-end justify-center">
