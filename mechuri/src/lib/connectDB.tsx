@@ -1,8 +1,7 @@
-// lib/mongodb.ts
 import { MongoClient, Db } from 'mongodb';
 
 const MONGODB_URI = process.env.MONGODB_URI as string;
-const DB_NAME = 'mechuri';
+const DB_NAME = process.env.MONGODB_NAME as string;
 
 interface CachedConnection {
   client: MongoClient;
