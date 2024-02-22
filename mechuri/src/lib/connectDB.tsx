@@ -19,7 +19,6 @@ export async function connectDB(): Promise<CachedConnection> {
   if (!MONGODB_URI) {
     throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
   }
-
   const client = new MongoClient(MONGODB_URI, {
     // useNewUrlParser: true,
     // useUnifiedTopology: true,
