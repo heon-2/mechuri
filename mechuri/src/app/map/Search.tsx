@@ -16,6 +16,12 @@ export default function Search({ onSearch }: AddressProps) {
           type="text"
           value={inputAddress}
           onChange={(e) => setInputAddress(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              onSearch(inputAddress);
+              setInputAddress('');
+            }
+          }}
           className="grow"
           placeholder="주소를 입력하세요"
         ></input>

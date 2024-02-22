@@ -38,7 +38,7 @@ export default function Map() {
             position.coords.longitude,
           );
 
-          if (!map) {
+          if (map === null) {
             // 지도 생성
             const mapContainer = document.getElementById('map'); // 지도를 표시할 div
             const mapOption = {
@@ -92,14 +92,13 @@ export default function Map() {
 
         if (marker) {
           marker.setMap(null);
-        } else {
-          const newMarker = new window.kakao.maps.Marker({
-            // map: map,
-            position: coords,
-          });
-          newMarker.setMap(map);
-          setMarker(newMarker);
         }
+        const newMarker = new window.kakao.maps.Marker({
+          position: coords,
+        });
+        newMarker.setMap(map);
+        setMarker(newMarker);
+
         // const infowindow = new window.kakao.maps.InfoWindow({
         //   content: '<div style="width:150px;text-align:center;padding:6px 0;">검색 결과</div>',
         // });
