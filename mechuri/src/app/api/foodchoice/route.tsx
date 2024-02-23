@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/connectDB'; // 연결 모듈 임포트
 
-type Question = {
-  _id: string;
-  step: number;
-  question: string;
-};
 // GET
 export async function GET(request: NextRequest) {
   try {
@@ -80,6 +75,7 @@ export async function POST(request: NextRequest) {
         headers: { 'Content-Type': 'application/json' },
       });
     } else {
+      console.log(queryConditions);
       return new Response(JSON.stringify({ error: 'No matching food found' }), {
         status: 404,
         headers: { 'Content-Type': 'application/json' },
