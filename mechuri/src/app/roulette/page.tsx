@@ -129,7 +129,7 @@ export default function Roulette() {
         >
           -
         </button>
-        <p className="mr-2 text-2xl">{options.length}/12</p>
+        <p className="mr-2 text-2xl">{options.length}/10</p>
         <button
           onClick={handleAddClick}
           className="bg-yellow-500 text-white px-4 py-2 rounded-md text-2xl"
@@ -137,10 +137,11 @@ export default function Roulette() {
           +
         </button>
       </div>
-      {result && modalOpen && (
-        <ResultModal result={result} onClose={() => setModalOpen(false)}></ResultModal>
-      )}
-      {result && <p>결과: {result.option}</p>}
+      <ResultModal
+        result={result}
+        onClose={() => setModalOpen(false)}
+        open={modalOpen}
+      ></ResultModal>
     </div>
   );
 }

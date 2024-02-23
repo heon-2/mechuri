@@ -1,11 +1,11 @@
 import React from 'react';
 import NavBar from '@/components/commons/NavBar';
-import MainPage from './MainPage';
+import FoodTest from './FoodTest';
 export default function Page() {
   return (
-    <div className="">
+    <div className="h-screen">
       <NavBar />
-      <MainPage />
+      <FoodTest />
     </div>
   );
 }
