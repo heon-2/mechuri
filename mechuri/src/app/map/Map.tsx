@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Search from './Search';
+import SearchPlace from './SearchPlace';
+
 declare global {
   interface Window {
     kakao: any;
@@ -112,6 +114,7 @@ export default function Map() {
   return (
     <div>
       <Search onSearch={searchAddress}></Search>
+      <SearchPlace map={map}></SearchPlace>
       <div
         id="map"
         className="mt-2"
