@@ -67,7 +67,9 @@ export default function FoodTest() {
     // 모든 질문에 대한 답변이 완료되었을 때만 서버로 데이터를 전송
     if (answers.length === questionnaire.length && questionnaire.length > 0) {
       const sendAnswers = async () => {
-        const response = await fetch('/api/foodchoice/result', {
+        // const response = await fetch('/api/foodchoice', { -> 여기서 api 빼면 왜 html이 날아오냐?
+
+        const response = await fetch('/api/foodchoice', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
