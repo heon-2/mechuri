@@ -13,17 +13,17 @@ import FoodMap from '@/components/main/FoodMap';
 import Roulette from '@/components/main/Roulette';
 export default function MainPage() {
   return (
-    <div className="flex h-full w-4/5">
+    <div className="flex h-full w-screen">
       <Swiper
         className="mySwiper"
         direction={'vertical'}
-        navigation={true}
+        // navigation={true}
         mousewheel={true}
         pagination={{
           clickable: true,
         }}
         autoHeight={true}
-        modules={[Pagination, EffectFade, Navigation, Mousewheel, Autoplay]}
+        modules={[Pagination, Navigation, Mousewheel, Autoplay]}
         autoplay={{
           delay: 8000,
           disableOnInteraction: false,
