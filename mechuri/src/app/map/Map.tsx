@@ -113,16 +113,20 @@ export default function Map() {
 
   return (
     <div>
-      <Search onSearch={searchAddress}></Search>
-      <SearchPlace map={map}></SearchPlace>
-      <div
-        id="map"
-        className="mt-2"
-        style={{ width: '500px', height: '400px', overflow: 'hidden' }}
-      ></div>
-      <button onClick={setCurrentLocation} className="mt-2 p-2 bg-blue-500 text-white">
-        현재위치
-      </button>
+      <div className="grid grid-cols-2 gap-2">
+        <SearchPlace map={map}></SearchPlace>
+        <div>
+          <Search onSearch={searchAddress}></Search>
+          <div
+            id="map"
+            className="mt-2"
+            style={{ width: '500px', height: '400px', overflow: 'hidden' }}
+          ></div>
+          <button onClick={setCurrentLocation} className="mt-2 p-2 bg-blue-500 text-white">
+            현재위치
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
