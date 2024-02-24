@@ -34,6 +34,7 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
   const pageSize = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(0);
+  const [markers, setMakrers] = useState<any[]>([]);
 
   const url = `https://dapi.kakao.com/v2/local/search/keyword?query=${keywordInput}&page=${currentPage}&size=${pageSize}`;
 
@@ -92,6 +93,32 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
   useEffect(() => {
     handleSearch();
   }, [currentPage]);
+
+  useEffect(() => {
+    displayMarkers();
+  }, [places]);
+
+  const displayMarkers = () => {
+    markers.forEach((marker) => marker.setMap(null));
+
+    const newMarkers = places.map((place) => {
+      const position = new window.kakao.maps.LatLng(place.y, place.x);
+      const marker = new window.kakao.maps.Marker({
+        position: position,
+        map: map,
+      });
+
+      return marker;
+    });
+
+    setMakrers(newMarkers);
+
+    if (newMarkers.length > 0) {
+      const bounds = new window.kakao.maps.LatLngBounds();
+      newMarkers.forEach((marker) => bounds.extend(marker.getPosition()));
+      map.setBounds(bounds);
+    }
+  };
 
   // const [markers, setMarkers] = useState<any[]>([]);
   // const [pagination, setPagination] = useState<any>(null);
