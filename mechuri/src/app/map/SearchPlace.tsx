@@ -31,8 +31,11 @@ interface PlaceProps {
 export default function SearchPlace({ map }: PlaceSearchProps) {
   const [keywordInput, setKeywordInput] = useState<string>('');
   const [places, setPlaces] = useState<PlaceProps[]>([]);
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(0);
 
-  const url = `https://dapi.kakao.com/v2/local/search/keyword?query=${keywordInput}`;
+  const url = `https://dapi.kakao.com/v2/local/search/keyword?query=${keywordInput}&page=${currentPage}&size=${pageSize}`;
 
   const handleSearch = async () => {
     try {
@@ -46,11 +49,12 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
         throw new Error('Data could not be fetched');
       }
       const jsonResponse = await response.json();
-      // 이제 jsonResponse에서 documents 프로퍼티에 접근할 수 있습니다.
       const data: PlaceProps[] = jsonResponse.documents;
-      // const data: PlaceProps[] = await response.json().documen
       setPlaces(data);
+      console.log(jsonResponse);
       console.log(data);
+      const totalItems = jsonResponse.meta.pageable_count;
+      setTotalPage(Math.ceil(totalItems / pageSize));
     } catch (error) {
       console.log(error);
     }
@@ -74,6 +78,20 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
     //       console.error('에러', error);
     //     });
   };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const handleChangePage = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, [currentPage]);
 
   // const [markers, setMarkers] = useState<any[]>([]);
   // const [pagination, setPagination] = useState<any>(null);
@@ -201,6 +219,7 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
           type="text"
           value={keywordInput}
           onChange={(e) => setKeywordInput(e.target.value)}
+          onKeyDown={handleKeyDown}
           className="grow"
           placeholder="키워드를 입력해주세요"
         />
@@ -238,6 +257,17 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="join">
+        {Array.from({ length: totalPage }, (_, i) => (
+          <button
+            key={i + 1}
+            className={`join-item btn ${currentPage === i + 1 ? 'btn-active' : ''}`}
+            onClick={() => handleChangePage(i + 1)}
+          >
+            {i + 1}
+          </button>
+        ))}
       </div>
       {/* <ul>
         {places.map((place, index) => (
