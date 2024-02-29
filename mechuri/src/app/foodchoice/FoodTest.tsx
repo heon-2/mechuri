@@ -88,7 +88,8 @@ export default function FoodTest() {
   };
   const currentQuestion = questionnaire[step - 1];
   return (
-    <div className="grid grid-rows-5 h-full w-screen">
+    // calc을 사용한 높이 조절 -> 3rem은 NavBar의 높이
+    <div className="grid grid-rows-5 w-screen h-[calc(100%-2.5rem)]">
       {/* 질문 표시 */}
       {currentQuestion && (
         <div className="row-span-1 flex items-end justify-center w-screen font-bold text-4xl">
@@ -102,7 +103,7 @@ export default function FoodTest() {
           {currentQuestion?.Answers?.map((answer, idx) => (
             <div
               key={idx}
-              className="flex border border-red-500 justify-center items-center cursor-pointer"
+              className="flex  justify-center items-center cursor-pointer"
               style={{ flexBasis: `${80 / currentQuestion?.Answers?.length}%` }}
               onClick={() => handleClick(answer.answerId)}
             >
