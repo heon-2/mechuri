@@ -3,145 +3,259 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
+// declare global {
+//   interface Window {
+//     kakao: any;
+//   }
+// }
 
 interface PlaceSearchProps {
   map: any;
 }
 
-export default function ({ map }: PlaceSearchProps) {
-  const [markers, setMarkers] = useState<any[]>([]);
-  const [pagination, setPagination] = useState<any>(null);
+interface PlaceProps {
+  address_name: string;
+  category_group_code: string;
+  category_group_name: string;
+  category_name: string;
+  distance: string;
+  id: string;
+  phone: string;
+  place_name: string;
+  place_url: string;
+  road_address_name: string;
+  x: string;
+  y: string;
+}
+
+export default function SearchPlace({ map }: PlaceSearchProps) {
+  const [keywordInput, setKeywordInput] = useState<string>('');
+  const [places, setPlaces] = useState<PlaceProps[]>([]);
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(0);
+  const [markers, setMakrers] = useState<any[]>([]);
+
+  const url = `https://dapi.kakao.com/v2/local/search/keyword?query=${keywordInput}&page=${currentPage}&size=${pageSize}`;
+
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_RESTAPI_APIKEY}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Data could not be fetched');
+      }
+      const jsonResponse = await response.json();
+      const data: PlaceProps[] = jsonResponse.documents;
+      setPlaces(data);
+      console.log(jsonResponse);
+      console.log(data);
+      const totalItems = jsonResponse.meta.pageable_count;
+      setTotalPage(Math.ceil(totalItems / pageSize));
+    } catch (error) {
+      console.log(error);
+    }
+    //   fetch(url, {
+    //     method: 'GET',
+    //     headers: {
+    //       Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_RESTAPI_APIKEY}`,
+    //     },
+    //   })
+    //     .then((response) => {
+    //       if (response.ok) {
+    //         return response.json();
+    //       }
+    //       throw new Error('Network response was not ok.');
+    //     })
+    //     .then((data) => {
+    //       console.log(data.documents);
+    //       setPlaces(data.documents);
+    //     })
+    //     .catch((error) => {
+    //       console.error('에러', error);
+    //     });
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const handleChangePage = (page: number) => {
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
-    if (!map) return;
+    handleSearch();
+  }, [currentPage]);
 
-    const place = new window.kakao.maps.services.Places();
-    // const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
+  useEffect(() => {
+    displayMarkers();
+  }, [places]);
 
-    const SearchPlace = () => {
-      const keyword = (document.getElementById('keyword') as HTMLInputElement).value;
+  const displayMarkers = () => {
+    markers.forEach((marker) => marker.setMap(null));
 
-      if (!keyword.replace(/^\s+|\s+$/g, '')) {
-        alert('키워드를 입력해주세요');
-        return;
-      }
-      place.keywordSearch(keyword, placeSearchCB);
-    };
-
-    const placeSearchCB = (data: any, status: any, pagination: any) => {
-      if (status === window.kakao.maps.services.Status.OK) {
-        displayPlaces(data);
-        setPagination(pagination);
-        displayPagination(pagination);
-      } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
-        alert('검색 결과가 존재하지 않습니다.');
-      } else if (status === window.kakao.maps.services.Status.ERROR) {
-        alert('검색 결과 중 오류가 발생했습니다.');
-      }
-    };
-
-    const displayPlaces = (places: any[]) => {
-      const listElement = document.getElementById('placeList');
-      //   const menuElement = document.getElementById('menu_wrap');
-      const bounds = new window.kakao.maps.LatLngBounds();
-
-      removeAllChildNodes(listElement);
-      removeMarker();
-
-      const newMarkers = places.map((place: any, i: number) => {
-        const placePosition = new window.kakao.maps.LatLng(place.y, place.x);
-        const marker = addMarker(placePosition, i, place.place_name);
-        bounds.extend(placePosition);
-
-        if (listElement) {
-          const itemElement = document.createElement('li');
-          itemElement.textContent = place.place_name;
-          listElement.appendChild(itemElement);
-        }
-        return marker;
-      });
-
-      setMarkers(newMarkers);
-      map.setBounds(bounds);
-    };
-
-    const addMarker = (position: any, idx: number, title: string) => {
-      const imageSrc =
-        'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png';
-      const imageSize = new window.kakao.maps.Size(36, 37);
-      const imgOptions = {
-        spriteSize: new window.kakao.maps.Size(36, 691),
-        spriteOrigin: new window.kakao.maps.Point(0, idx * 46 + 10),
-        offset: new window.kakao.maps.Point(13, 37),
-      };
-      const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions);
+    const newMarkers = places.map((place) => {
+      const position = new window.kakao.maps.LatLng(place.y, place.x);
       const marker = new window.kakao.maps.Marker({
-        position,
-        image: markerImage,
+        position: position,
+        map: map,
       });
 
-      marker.setMap(map);
-      //   return marker;
-      markers.push(marker);
-    };
+      return marker;
+    });
 
-    const removeMarker = () => {
-      markers.forEach((marker) => marker.setMap(null));
-      setMarkers([]);
-    };
+    setMakrers(newMarkers);
 
-    const removeAllChildNodes = (parent: Element | null) => {
-      while (parent && parent.firstChild) {
-        parent.removeChild(parent.firstChild);
-      }
-    };
+    if (newMarkers.length > 0) {
+      const bounds = new window.kakao.maps.LatLngBounds();
+      newMarkers.forEach((marker) => bounds.extend(marker.getPosition()));
+      map.setBounds(bounds);
+    }
+  };
 
-    const displayPagination = (pagination: any) => {
-      const paginationElement = document.getElementById('pagination');
-      removeAllChildNodes(paginationElement);
+  // const [markers, setMarkers] = useState<any[]>([]);
+  // const [pagination, setPagination] = useState<any>(null);
 
-      const divElement = document.createElement('div');
-      divElement.className = 'join';
+  // useEffect(() => {
+  //   if (!map) return;
 
-      for (let i = 1; i <= pagination.last; i++) {
-        const buttonElement = document.createElement('button');
-        buttonElement.textContent = i.toString();
-        buttonElement.className = 'join-item btn btn-sm';
+  //   const place = new window.kakao.maps.services.Places();
+  //   // const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
 
-        if (i === pagination.current) {
-          buttonElement.classList.add('btn-active');
-        }
+  //   const SearchPlace = () => {
+  //     const keyword = (document.getElementById('keyword') as HTMLInputElement).value;
 
-        buttonElement.onclick = (e) => {
-          e.preventDefault();
-          pagination.gotoPage(i);
-        };
-        paginationElement?.appendChild(buttonElement);
-      }
-    };
+  //     if (!keyword.replace(/^\s+|\s+$/g, '')) {
+  //       alert('키워드를 입력해주세요');
+  //       return;
+  //     }
+  //     place.keywordSearch(keyword, placeSearchCB);
+  //   };
 
-    document.getElementById('searchBtn')?.addEventListener('click', SearchPlace);
+  //   const placeSearchCB = (data: any, status: any, pagination: any) => {
+  //     if (status === window.kakao.maps.services.Status.OK) {
+  //       displayPlaces(data);
+  //       setPagination(pagination);
+  //       displayPagination(pagination);
+  //     } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
+  //       alert('검색 결과가 존재하지 않습니다.');
+  //     } else if (status === window.kakao.maps.services.Status.ERROR) {
+  //       alert('검색 결과 중 오류가 발생했습니다.');
+  //     }
+  //   };
 
-    return () => {
-      document.getElementById('searchBtn')?.removeEventListener('click', SearchPlace);
-    };
-  }, [map, markers]);
+  //   const displayPlaces = (places: any[]) => {
+  //     const listElement = document.getElementById('placeList');
+  //     //   const menuElement = document.getElementById('menu_wrap');
+  //     const bounds = new window.kakao.maps.LatLngBounds();
+
+  //     removeAllChildNodes(listElement);
+  //     removeMarker();
+
+  //     const newMarkers = places.map((place: any, i: number) => {
+  //       const placePosition = new window.kakao.maps.LatLng(place.y, place.x);
+  //       const marker = addMarker(placePosition, i, place.place_name);
+  //       bounds.extend(placePosition);
+
+  //       if (listElement) {
+  //         const itemElement = document.createElement('li');
+  //         itemElement.textContent = place.place_name;
+  //         listElement.appendChild(itemElement);
+  //       }
+  //       return marker;
+  //     });
+
+  //     setMarkers(newMarkers);
+  //     map.setBounds(bounds);
+  //   };
+
+  //   const addMarker = (position: any, idx: number, title: string) => {
+  //     const imageSrc =
+  //       'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png';
+  //     const imageSize = new window.kakao.maps.Size(36, 37);
+  //     const imgOptions = {
+  //       spriteSize: new window.kakao.maps.Size(36, 691),
+  //       spriteOrigin: new window.kakao.maps.Point(0, idx * 46 + 10),
+  //       offset: new window.kakao.maps.Point(13, 37),
+  //     };
+  //     const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions);
+  //     const marker = new window.kakao.maps.Marker({
+  //       position,
+  //       image: markerImage,
+  //       title: title,
+  //     });
+
+  //     marker.setMap(map);
+  //     return marker;
+  //     // markers.push(marker);
+  //   };
+
+  //   const removeMarker = () => {
+  //     markers.forEach((marker) => marker.setMap(null));
+  //     setMarkers([]);
+  //   };
+
+  //   const removeAllChildNodes = (parent: Element | null) => {
+  //     while (parent && parent.firstChild) {
+  //       parent.removeChild(parent.firstChild);
+  //     }
+  //   };
+
+  //   const displayPagination = (pagination: any) => {
+  //     const paginationElement = document.getElementById('pagination');
+  //     removeAllChildNodes(paginationElement);
+
+  //     const divElement = document.createElement('div');
+  //     divElement.className = 'join';
+
+  //     for (let i = 1; i <= pagination.last; i++) {
+  //       const buttonElement = document.createElement('button');
+  //       buttonElement.textContent = i.toString();
+  //       buttonElement.className = 'join-item btn btn-sm';
+
+  //       if (i === pagination.current) {
+  //         buttonElement.classList.add('btn-active');
+  //       }
+
+  //       buttonElement.onclick = (e) => {
+  //         e.preventDefault();
+  //         pagination.gotoPage(i);
+  //       };
+  //       paginationElement?.appendChild(buttonElement);
+  //     }
+  //   };
+
+  //   document.getElementById('searchBtn')?.addEventListener('click', SearchPlace);
+
+  //   return () => {
+  //     document.getElementById('searchBtn')?.removeEventListener('click', SearchPlace);
+  //   };
+  // }, [map, markers]);
 
   return (
     <div>
       <label className="input input-bordered flex items-center gap-2 w-[500px]">
-        <input type="text" id="keyword" className="grow" placeholder="키워드를 입력해주세요" />
+        <input
+          type="text"
+          value={keywordInput}
+          onChange={(e) => setKeywordInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="grow"
+          placeholder="키워드를 입력해주세요"
+        />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 16 16"
           fill="currentColor"
-          id="searchBtn"
           className="w-4 h-4 opacity-70"
+          onClick={handleSearch}
         >
           <path
             fillRule="evenodd"
@@ -150,8 +264,48 @@ export default function ({ map }: PlaceSearchProps) {
           />
         </svg>
       </label>
-      <ul id="placeList"></ul>
-      <div id="pagination"></div>
+      <div className="overflow-x-auto">
+        <table className="table w-full">
+          {/* head */}
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            {places.map((place, index) => (
+              <tr key={index}>
+                <th>{index + 1}</th>
+                <td>{place.place_name}</td>
+                <td>{place.address_name}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="join">
+        {Array.from({ length: totalPage }, (_, i) => (
+          <button
+            key={i + 1}
+            className={`join-item btn ${currentPage === i + 1 ? 'btn-active' : ''}`}
+            onClick={() => handleChangePage(i + 1)}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
+      {/* <ul>
+        {places.map((place, index) => (
+          <li key={index}>
+            <div>{place.place_name}</div>
+            <div>{place.address_name}</div>
+          </li>
+        ))}
+      </ul> */}
+      {/* <ul id="placeList" className="mt-2"></ul>
+      <div id="pagination" className="mt-2"></div> */}
     </div>
   );
 }
