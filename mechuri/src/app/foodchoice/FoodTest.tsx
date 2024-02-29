@@ -15,29 +15,11 @@ interface AnswerDetail {
   shortAnswer: string;
 }
 
-// 서버에 보내지는 데이터 예시
-/* 
-{
-  "answers": [
-    {
-      "step": 1,
-      "shortQuestion": "foodTypePreference",
-      "shortAnswer": "light"
-    },
-    {
-      "step": 2,
-      "shortQuestion": "soupPreference",
-      "shortAnswer": "yes"
-    },
-    // 이하 답변들...
-  ]
-}
-*/
-
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import BottomProgressiveBar from '@/components/foodchoice/BottomProgressiveBar';
 export default function FoodTest() {
   let [step, setStep] = useState(1);
   const [answers, setAnswers] = useState<
@@ -67,8 +49,6 @@ export default function FoodTest() {
     // 모든 질문에 대한 답변이 완료되었을 때만 서버로 데이터를 전송
     if (answers.length === questionnaire.length && questionnaire.length > 0) {
       const sendAnswers = async () => {
-        // const response = await fetch('/api/foodchoice', { -> 여기서 api 빼면 왜 html이 날아오냐?
-
         const response = await fetch('/api/foodchoice', {
           method: 'POST',
           headers: {
@@ -86,11 +66,6 @@ export default function FoodTest() {
       sendAnswers();
     }
   }, [answers, questionnaire.length, router]);
-
-  const foods = [
-    { name: '떡볶이', image: '/images/떡볶이.jpg' },
-    { name: '피자', image: '/images/떡볶이.jpg' },
-  ];
 
   const handleClick = async (selectedAnswerId: number) => {
     const selectedAnswer = currentQuestion?.Answers.find(
@@ -110,48 +85,39 @@ export default function FoodTest() {
     if (step < questionnaire.length) {
       setStep((currentStep) => currentStep + 1);
     }
-    // 마지막 단계에서의 서버 요청 로직은 이제 useEffect에서 처리합니다.
   };
   const currentQuestion = questionnaire[step - 1];
   return (
-    <div className="grid grid-rows-5 grid-cols-2 h-full">
+    <div className="grid grid-rows-5 h-full w-screen">
       {/* 질문 표시 */}
       {currentQuestion && (
-        <div className="row-span-1 col-span-2 flex items-end justify-center">
-          질문이 적히는 곳 : {currentQuestion?.Question?.longQuestion}
-          <br />
-          {currentQuestion.Question.shortQuestion}
-          {/* <br></br>// 선택한 것 : {answers.join(', ')} */}
+        <div className="row-span-1 flex items-end justify-center w-screen font-bold text-4xl">
+          Q{step}. {currentQuestion?.Question?.longQuestion}
         </div>
       )}
 
       {/* 선택지 */}
-      {currentQuestion?.Answers?.map((answer, idx) => (
-        <div key={idx} className="row-span-3 flex items-center justify-center">
-          <div
-            className="w-1/2 aspect-square flex flex-col items-center justify-center border border-red-500"
-            onClick={() => handleClick(answer.answerId)}
-          >
-            {/* 예시로 이미지와 이름을 표시하는 부분은 실제 응답 데이터에 맞게 조정해야 합니다. */}
-            <div className="w-56">
-              {/* <img src={`/images/${answer.answer}.jpg`} alt={answer.answer} /> */}
-              <img src="/images/떡볶이.jpg" alt={answer.longAnswer} />
+      <div className="row-span-3 flex items-center justify-center">
+        <div className="flex w-3/4 h-2/3 justify-around">
+          {currentQuestion?.Answers?.map((answer, idx) => (
+            <div
+              key={idx}
+              className="flex border border-red-500 justify-center items-center cursor-pointer"
+              style={{ flexBasis: `${80 / currentQuestion?.Answers?.length}%` }}
+              onClick={() => handleClick(answer.answerId)}
+            >
+              <div className="aspect-square flex flex-col items-center justify-center">
+                {/* 선택지 내용 */}
+                <div>
+                  <img className="rounded-xl" src="/images/떡볶이.jpg" alt="Sample Image" />
+                </div>
+                <div className="mt-5 font-semibold text-3xl">{answer.longAnswer}</div>
+              </div>
             </div>
-            <div>
-              {answer.longAnswer}
-              <hr />
-              {answer.shortAnswer}
-            </div>
-          </div>
-        </div>
-      ))}
-
-      <div className="row-span-1 col-span-2 flex flex-col justify-center items-center">
-        <div>진행바 위치할 곳</div>
-        <div>
-          현재 : {step} / 총 질문 : {questionnaire.length}
+          ))}
         </div>
       </div>
+      <BottomProgressiveBar step={step} totalStep={totalStep} />
     </div>
   );
 }
