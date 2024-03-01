@@ -42,6 +42,25 @@ export default function Roulette() {
   const [result, setResult] = useState<Option | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
+  const [testt, setTestt] = useState([]);
+
+  useEffect(() => {
+    const test = async () => {
+      try {
+        const response = await fetch('/api/roulette');
+        if (!response.ok) {
+          throw new Error('Data could no tbe fetched');
+        }
+        const data = await response.json();
+        setTestt(data);
+        console.log('dfafdas', data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    test();
+  }, []);
+
   useEffect(() => {
     resetOption();
   }, []);
