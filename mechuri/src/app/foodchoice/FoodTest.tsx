@@ -71,7 +71,6 @@ export default function FoodTest() {
     const selectedAnswer = currentQuestion?.Answers.find(
       (answer) => answer.answerId === selectedAnswerId,
     );
-
     if (selectedAnswer) {
       const newAnswer = {
         step: currentQuestion.step,
@@ -89,30 +88,29 @@ export default function FoodTest() {
   const currentQuestion = questionnaire[step - 1];
   return (
     // calc을 사용한 높이 조절 -> 3rem은 NavBar의 높이
-    <div className="grid grid-rows-5 w-screen h-[calc(100%-2.5rem)]">
+    <div className="grid grid-rows-5 w-screen h-[calc(100%-2.5rem)] bg-[#F6F6F6]">
       {/* 질문 표시 */}
       {currentQuestion && (
-        <div className="row-span-1 flex items-end justify-center w-screen font-bold text-4xl">
+        <div className="row-span-1 flex items-center justify-center w-screen font-bold text-5xl">
           Q{step}. {currentQuestion?.Question?.longQuestion}
         </div>
       )}
 
       {/* 선택지 */}
       <div className="row-span-3 flex items-center justify-center">
-        <div className="flex w-3/4 h-2/3 justify-around">
+        <div className="flex w-4/5 h-4/5 justify-around">
           {currentQuestion?.Answers?.map((answer, idx) => (
             <div
               key={idx}
-              className="flex  justify-center items-center cursor-pointer"
+              // 추후에 그림자를 뉴모피즘으로 변환예정.
+              className="flex  justify-center items-center cursor-pointer  rounded-3xl bg-white shadow-2xl"
               style={{ flexBasis: `${80 / currentQuestion?.Answers?.length}%` }}
               onClick={() => handleClick(answer.answerId)}
             >
-              <div className="aspect-square flex flex-col items-center justify-center">
+              <div className="h-full w-full flex flex-col items-center justify-center gap-10">
                 {/* 선택지 내용 */}
-                <div>
-                  <img className="rounded-xl" src="/images/떡볶이.jpg" alt="Sample Image" />
-                </div>
-                <div className="mt-5 font-semibold text-3xl">{answer.longAnswer}</div>
+                <img className="rounded-xl h-2/3" src="/images/떡볶이.jpg" alt="Sample Image" />
+                <div className="font-semibold text-4xl">{answer.longAnswer}</div>
               </div>
             </div>
           ))}
