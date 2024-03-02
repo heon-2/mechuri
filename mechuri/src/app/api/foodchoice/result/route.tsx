@@ -10,7 +10,6 @@ export async function GET(request: NextRequest, response: NextResponse) {
     const foodsCollection = db.collection('foods');
     const foodId = parseInt(request.nextUrl.searchParams.get('foodId') ?? '0'); // 코드 수정해야할 부분. parseInt 깔끔하게 정리하기
     const resultFood = await foodsCollection.findOne({ foodId: foodId });
-    // console.log(resultFood);
     console.log(typeof foodId);
     return new Response(JSON.stringify(resultFood), {
       status: 200,
