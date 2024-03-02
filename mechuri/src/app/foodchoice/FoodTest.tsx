@@ -13,6 +13,7 @@ interface AnswerDetail {
   answerId: number;
   longAnswer: string;
   shortAnswer: string;
+  image: string;
 }
 
 import React, { useEffect } from 'react';
@@ -109,7 +110,7 @@ export default function FoodTest() {
             >
               <div className="h-full w-full flex flex-col items-center justify-center gap-10">
                 {/* 선택지 내용 */}
-                <img className="rounded-xl h-2/3" src="/images/떡볶이.jpg" alt="Sample Image" />
+                <img className="rounded-xl h-2/3" src={answer.image} alt="Sample Image" />
                 <div className="font-semibold text-4xl">{answer.longAnswer}</div>
               </div>
             </div>
