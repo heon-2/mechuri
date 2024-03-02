@@ -37,9 +37,12 @@ export default function ChatContent() {
     // OpenAI API에 요청을 보내기 위한 데이터 준비
     const reqBody = {
       model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: defaultMessage }],
-      temperature: 0.7,
-      max_tokens: 50,
+      messages: [
+        { role: 'user', content: defaultMessage },
+        { role: 'system', content: 'You are a Someone who recommends a menu' },
+      ],
+      temperature: 1,
+      max_tokens: 150,
     };
 
     try {
@@ -86,10 +89,10 @@ export default function ChatContent() {
     }
   }
   return (
-    <div className="flex flex-col h-full w-3/5">
-      <div className="flex-grow overflow-auto">
+    <div className="flex flex-col h-4/5 w-2/5 ">
+      <div className="flex-grow overflow-auto bg-slate-50">
         {chat.map((c, index) => (
-          <div key={index} className={`chat ${c.sender === 'bot' ? 'chat-start' : 'chat-end'}`}>
+          <div key={index} className={`chat ${c.sender === 'bot' ? 'chat-start' : 'chat-end'} `}>
             <div className="chat-image avatar">
               <div className="w-10 rounded-full">
                 <img
@@ -104,17 +107,17 @@ export default function ChatContent() {
             </div>
             <div className="chat-header">
               {c.sender === 'bot' ? '메추리봇' : '사용자'}
-              <time className="text-xs opacity-50">{c.time}</time>
+              <time className="text-xs opacity-50 ml-1">{c.time}</time>
             </div>
             <div className="chat-bubble">{c.message}</div>
           </div>
         ))}
       </div>
-      <div className="flex gap-4 w-full mb-4 shadow-lg">
+      <div className="flex w-full shadow-lg bg-slate-50 rounded-b-xl gap-1">
         <input
           type="text"
-          placeholder="오늘의 기분 상태를 상세하게 적어주세요! (ex. 행복, 슬픔, 피곤, 기분 좋음, 기분 나쁨 등)"
-          className="input input-bordered w-full"
+          placeholder="오늘의 기분 상태를 상세하게 적어주세요! (ex. 행복, 슬픔, 짜증 등)"
+          className="input input-bordered w-full "
           value={input}
           onChange={handleInput}
           onKeyDown={(e) => {
@@ -123,8 +126,8 @@ export default function ChatContent() {
             }
           }}
         />
-        <button className="btn btn-success w-28" onClick={handleSend}>
-          💭
+        <button className="btn btn-success w-28 text-white " onClick={handleSend}>
+          전송
         </button>
       </div>
     </div>
