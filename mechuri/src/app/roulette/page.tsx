@@ -5,23 +5,26 @@ import Select from './Select';
 import ResultModal from '@/components/roulette/ResultModal';
 import NavBar from '@/components/commons/NavBar';
 import { Caveat } from 'next/font/google';
+import arrow from '../../../public/images/arrow.png';
+import Image from 'next/image';
 
-// export interface FoodData {
-//   _id: string;
-//   foodId: number;
-//   name: string;
-//   foodTypePreference: string;
-//   soupPreference: string;
-//   noodlesOrRice: string;
-//   meatOrSeafood: string;
-//   diningCompanion: string;
-//   leastFavoriteCuisine: string;
-// }
+export interface FoodData {
+  _id: string;
+  foodId: number;
+  name: string;
+  foodTypePreference: string;
+  soupPreference: string;
+  noodlesOrRice: string;
+  meatOrSeafood: string;
+  diningCompanion: string;
+  leastFavoriteCuisine: string;
+}
 
 export default function Roulette() {
+  const [data, setData] = useState<FoodData[]>([]);
+  const [rouletteData, setRouletteData] = useState<FoodData[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const product = ['떡볶이', '돈가스', '초밥', '피자', '냉면', '치킨', '족발', '삼겹살'];
   const colors = [
     '#dc0936',
     '#e6471d',
@@ -37,8 +40,49 @@ export default function Roulette() {
   ];
 
   useEffect(() => {
-    drawRoulette();
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('/api/roulette');
+      if (!response.ok) {
+        throw new Error('Data could not be fetched');
+      }
+      const fetchData: FoodData[] = await response.json();
+      setData(fetchData);
+      console.log(fetchData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (data.length > 0) {
+      randomDataRoulette();
+    }
+  }, [data]);
+
+  const randomDataRoulette = () => {
+    const selectedItems = [];
+    const clonedData = [...data];
+    for (let i = 0; i < Math.min(10, clonedData.length); i++) {
+      const randomIndex = Math.floor(Math.random() * clonedData.length);
+      selectedItems.push(clonedData.splice(randomIndex, 1)[0]);
+    }
+    setRouletteData(selectedItems);
+  };
+
+  const resetRoulette = () => {
+    randomDataRoulette();
+    setSelectedItem(null);
+  };
+
+  useEffect(() => {
+    if (rouletteData.length > 0) {
+      drawRoulette();
+    }
+  }, [rouletteData]);
 
   const drawRoulette = () => {
     const canvas = canvasRef.current;
@@ -50,11 +94,11 @@ export default function Roulette() {
     canvas.height = 500;
     const [cw, ch] = [canvas.width / 2, canvas.height / 2];
     const radius = cw - 10; // 룰렛의 반지름
-    const arc = (2 * Math.PI) / product.length;
+    const arc = (2 * Math.PI) / rouletteData.length;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    product.forEach((item, i) => {
+    rouletteData.forEach((item, i) => {
       ctx.beginPath();
       ctx.fillStyle = colors[i % colors.length];
       ctx.moveTo(cw, ch);
@@ -69,7 +113,7 @@ export default function Roulette() {
         ch + (Math.sin(arc * i + arc / 2) * radius) / 1.5,
       );
       ctx.rotate(arc * i + arc / 2 + Math.PI / 2);
-      ctx.fillText(item, -ctx.measureText(item).width / 2, 0);
+      ctx.fillText(item.name, -ctx.measureText(item.name).width / 2, 0);
       ctx.restore();
     });
   };
@@ -101,28 +145,27 @@ export default function Roulette() {
   // };
 
   const rotate = () => {
-    const ran = Math.floor(Math.random() * product.length);
-    const arc = 360 / product.length;
+    if (rouletteData.length === 0) return;
+
+    const ran = Math.floor(Math.random() * rouletteData.length);
+    const arc = 360 / rouletteData.length;
     const rotate = ran * arc + 3600 + arc * 3 - arc / 4;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    canvas.style.transition = 'transform 2s ease-out';
-    canvas.style.transform = `rotate(-${rotate}deg)`;
+    canvas.style.transition = 'none';
+    canvas.style.transform = `rotate(0deg)`;
 
     setTimeout(() => {
-      alert(`오늘의 야식은?! ${product[ran]} 어떠신가요?`);
-    }, 2000);
-  };
+      canvas.style.transition = 'transform 2s ease-out';
+      canvas.style.transform = `rotate(-${rotate}deg)`;
 
-  const resetRotation = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    canvas.style.transition = 'none';
-    canvas.style.transform = 'none';
-    setSelectedItem(null);
+      setTimeout(() => {
+        setSelectedItem(rouletteData[ran].name);
+        alert(`오늘의 야식은?! ${rouletteData[ran].name} 어떠신가요?`);
+      }, 2000);
+    }, 10);
   };
 
   return (
@@ -134,17 +177,20 @@ export default function Roulette() {
             position: 'absolute',
             top: '0',
             left: '50%',
-            transform: 'translateX(-50%)',
-            width: '0',
-            height: '0',
-            borderLeft: '10px solid transparent',
-            borderRight: '10px solid transparent',
-            borderBottom: '20px solid black',
+            width: '50px',
+            height: '50px',
+            transform: 'translateX(-50%), zIndex: 10',
           }}
-        />
+        >
+          <Image src={arrow} alt="Roulette Arrow"></Image>
+        </div>
       </div>
-      <button onClick={rotate}>룰렛 돌리기</button>
-      <button onClick={resetRotation}>초기화</button>
+
+      <div className="flex">
+        <button onClick={rotate}>룰렛 돌리기</button>
+        <button onClick={resetRoulette}>초기화</button>
+      </div>
+      <div className="flex"></div>
       {selectedItem && <p>선택된 항목: {selectedItem}</p>}
     </div>
   );
@@ -209,30 +255,30 @@ export default function Roulette() {
 //     setModalOpen(true);
 //   };
 
-//   const handleAddClick = () => {
-//     if (options.length < 10) {
-//       const newPrizeNumber = Math.floor(Math.random() * options.length);
-//       if (!options.includes(data[newPrizeNumber])) {
-//         const newOption = [...options, data[newPrizeNumber]];
-//         setOptions(newOption);
-//         setMustSpin(false);
-//         setResult(null);
-//       }
-//     }
-//   };
-
-//   const handleRemoveClick = () => {
-//     if (options.length > 2) {
-//       const removeIndex = Math.floor(Math.random() * options.length);
-//       const newOptions = [...options];
-//       console.log('지우기 전', newOptions);
-//       newOptions.splice(removeIndex, 1);
-//       console.log('지우고 난 후', newOptions);
-//       setOptions(newOptions);
+// const handleAddClick = () => {
+//   if (options.length < 10) {
+//     const newPrizeNumber = Math.floor(Math.random() * options.length);
+//     if (!options.includes(data[newPrizeNumber])) {
+//       const newOption = [...options, data[newPrizeNumber]];
+//       setOptions(newOption);
 //       setMustSpin(false);
 //       setResult(null);
 //     }
-//   };
+//   }
+// };
+
+// const handleRemoveClick = () => {
+//   if (options.length > 2) {
+//     const removeIndex = Math.floor(Math.random() * options.length);
+//     const newOptions = [...options];
+//     console.log('지우기 전', newOptions);
+//     newOptions.splice(removeIndex, 1);
+//     console.log('지우고 난 후', newOptions);
+//     setOptions(newOptions);
+//     setMustSpin(false);
+//     setResult(null);
+//   }
+// };
 
 //   return (
 //     <div>
