@@ -190,13 +190,13 @@ export default function page() {
   // };
 
   return (
-    <div>
+    <div className="h-screen">
       <NavBar></NavBar>
-      <div className="grid grid-cols-4 gap-4 items-center justify-center">
+      <div className="grid grid-cols-3 items-center justify-center h-[calc(100vh-4rem)]">
         <div className="flex justify-center items-center">
           <Select></Select>
         </div>
-        <div className="col-span-3">
+        <div className="col-span-2">
           <Roulette></Roulette>
         </div>
       </div>
