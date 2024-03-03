@@ -30,7 +30,6 @@ type Answer = {
   shortQuestion: string;
   shortAnswer: string;
 };
-
 type Answers = Answer[];
 // POST 요청 처리
 // POST 요청 처리
@@ -43,7 +42,10 @@ export async function POST(request: NextRequest) {
     // 쿼리 조건 객체 생성
     const queryConditions: { [key: string]: any } = receivedAnswers.reduce(
       (acc, curr) => {
-        acc[curr.shortQuestion] = curr.shortAnswer;
+        // vegetablePreference가 'no'인 경우 제외 로직 추가 ( '상관없음'이기 떄문에 제외해야함 )
+        if (!(curr.shortQuestion === 'vegetablePreference' && curr.shortAnswer === 'no')) {
+          acc[curr.shortQuestion] = curr.shortAnswer;
+        }
         return acc;
       },
       {} as { [key: string]: any },

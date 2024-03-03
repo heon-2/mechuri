@@ -1,4 +1,19 @@
 import React from 'react';
 export default function ChatHeader() {
-  return <div className="">챗봇 헤더입니다.</div>;
+  return (
+    <div className="mt-10 w-2/5 h-24 bg-[#258fff] shadow-md rounded-t-2xl flex items-center">
+      <img
+        src="/images/떡볶이.jpg"
+        alt="Chatbot"
+        className="ml-5 h-16 flex items-center rounded-full aspect-square object-cover"
+      />
+      <div className="ml-4">
+        <p className="text-white font-semibold">메추리봇</p>
+        <div className="flex items-center">
+          <span className="block w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+          <p className="text-white text-sm">Online</p>
+        </div>
+      </div>
+    </div>
+  );
 }

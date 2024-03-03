@@ -1,7 +1,6 @@
-// 'use client';
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/connectDB'; // 연결 모듈 임포트
-// import { useSearchParams } from 'next/navigation';
+
 // GET
 type foodId = string | number;
 export async function GET(request: NextRequest, response: NextResponse) {
@@ -17,12 +16,6 @@ export async function GET(request: NextRequest, response: NextResponse) {
         'Content-Type': 'application/json',
       },
     });
-    // return new Response(JSON.stringify({ foodId: 1 }), {
-    //   status: 200,
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // });
   } catch (error) {
     console.error('Error fetching questions:', error);
     return new Response(JSON.stringify({ error: 'Failed to fetch questions' }), {
