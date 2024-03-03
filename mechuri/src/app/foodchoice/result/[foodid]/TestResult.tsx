@@ -41,8 +41,9 @@ export default function TestResult({ foodId }: ResultPageProps) {
     };
     fetchData();
   }, [foodId]);
+
   return (
-    <div>
+    <div className="h-[calc(100vh-4rem)]">
       <FoodChoiceResult resultData={resultData} />
     </div>
   );
