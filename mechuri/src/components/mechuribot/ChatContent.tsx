@@ -9,16 +9,16 @@ export default function ChatContent() {
     {
       message: '안녕하세요👋 여러분의 메뉴 고민을 해소시켜 줄 저는 메추리봇이에요.',
       sender: 'bot',
-      time: '12:00',
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     }, // 예시 시간, 실제 구현에서는 동적으로 설정
     {
       message: '오늘 여러분의 기분을 적어주시면, 그에 맞는 메뉴를 추천해드릴게요 !',
       sender: 'bot',
-      time: '12:01',
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
   const [defaultMessage, setDefaultMessage] = useState(
-    '제발 내 글을 보고 음식 메뉴 추천해줘. 딱 한 단어 [오늘의 추천음식:] 하고 여기에 추천음식을 적어줘. 이후 줄바꿈을 진행하고 이유를 한줄로 설명해줘.',
+    '오늘 내 기분에 맞는 음식메뉴를 한 단어로 추천해줘. 결과는 추천 음식/이유 형식으로 알려줘. 이유는 한 줄로 해줘.',
   );
   const [input, setInput] = useState('');
 
@@ -37,9 +37,12 @@ export default function ChatContent() {
     // OpenAI API에 요청을 보내기 위한 데이터 준비
     const reqBody = {
       model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: defaultMessage }],
-      temperature: 0.7,
-      max_tokens: 50,
+      messages: [
+        { role: 'user', content: defaultMessage },
+        { role: 'system', content: 'You are a Someone who recommends a menu' },
+      ],
+      temperature: 1,
+      max_tokens: 150,
     };
 
     try {
@@ -59,55 +62,72 @@ export default function ChatContent() {
 
       const data = await response.json();
       const botReply = data.choices[0].message.content.trim();
-
+      const parts = botReply.split('/');
+      const recommendedFood = parts[0].trim(); // 추천 음식
+      const reason = parts[1].trim(); // 이유
+      const finalReply = `오늘의 메추리봇 추천 음식은 ${recommendedFood}입니다😊 제가 추천해드리는 이유는 ${reason}`;
       // 챗봇의 답변을 채팅에 추가
       setChat((chat) => [
         ...chat,
         {
-          message: botReply,
+          message: finalReply,
           sender: 'bot',
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         },
       ]);
     } catch (error) {
       console.error('Error:', error);
-      // 오류 처리 또는 사용자에게 피드백
+      // 오류 처리 및 사용자에게 피드백
+      setChat((chat) => [
+        ...chat,
+        {
+          message: '[사용자의 요청이 제대로 전달되지 않았습니다. 추후에 다시 시도해주세요!]',
+          sender: 'bot',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        },
+      ]);
     }
   }
   return (
-    <div className="w-1/2">
-      {chat.map((c, index) => (
-        <div key={index} className={`chat ${c.sender === 'bot' ? 'chat-start' : 'chat-end'}`}>
-          <div className="chat-image avatar">
-            <div className="w-10 rounded-full">
-              <img
-                alt={c.sender === 'bot' ? 'Chatbot' : 'User'}
-                src={
-                  c.sender === 'bot'
-                    ? 'https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'
-                    : 'https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'
-                }
-              />
+    <div className="flex flex-col h-4/5 w-2/5 ">
+      <div className="flex-grow overflow-auto bg-slate-50">
+        {chat.map((c, index) => (
+          <div key={index} className={`chat ${c.sender === 'bot' ? 'chat-start' : 'chat-end'} `}>
+            <div className="chat-image avatar">
+              <div className="w-10 rounded-full">
+                <img
+                  alt={c.sender === 'bot' ? 'Chatbot' : 'User'}
+                  src={
+                    c.sender === 'bot'
+                      ? 'https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'
+                      : 'https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'
+                  }
+                />
+              </div>
             </div>
+            <div className="chat-header">
+              {c.sender === 'bot' ? '메추리봇' : '사용자'}
+              <time className="text-xs opacity-50 ml-1">{c.time}</time>
+            </div>
+            <div className="chat-bubble">{c.message}</div>
           </div>
-          <div className="chat-header">
-            {c.sender === 'bot' ? 'Chatbot' : 'You'}
-            <time className="text-xs opacity-50">{c.time}</time>
-          </div>
-          <div className="chat-bubble">{c.message}</div>
-          {/* <div className="chat-footer opacity-50">{c.sender === 'bot' ? 'Delivered' : 'Seen'}</div> */}
-        </div>
-      ))}
-      <div className="flex gap-4 w-full mt-4">
+        ))}
+      </div>
+      <div className="flex w-full shadow-lg bg-slate-50 rounded-b-xl gap-1">
         <input
           type="text"
-          placeholder="Type your message here..."
-          className="input input-bordered w-full"
+          placeholder="오늘의 기분 상태를 상세하게 적어주세요! (ex. 행복, 슬픔, 짜증 등)"
+          className="input input-bordered w-full "
           value={input}
           onChange={handleInput}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSend();
+            }
+          }}
         />
-        <button className="btn btn-success w-20" onClick={handleSend}>
-          💭
+        <button className="btn btn-success w-28 text-white " onClick={handleSend}>
+          전송
         </button>
       </div>
     </div>
