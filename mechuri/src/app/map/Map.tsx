@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import Search from './Search';
 import SearchPlace from './SearchPlace';
+import { useRecoilState } from 'recoil';
+import { currentLatState, currentLngState } from '@/stores/atoms/currentLocState';
 
 declare global {
   interface Window {
@@ -13,6 +15,8 @@ declare global {
 export default function Map() {
   const [map, setMap] = useState<any>(null);
   const [marker, setMarker] = useState<any>(null);
+  const [currentLat, setCurrentLat] = useRecoilState(currentLatState);
+  const [currentLng, setCurrentLng] = useRecoilState(currentLngState);
 
   useEffect(() => {
     const mapScript = document.createElement('script');
@@ -39,6 +43,8 @@ export default function Map() {
             position.coords.latitude,
             position.coords.longitude,
           );
+          setCurrentLat(position.coords.latitude);
+          setCurrentLng(position.coords.longitude);
 
           if (map === null) {
             // 지도 생성
