@@ -39,7 +39,7 @@ export default function FoodChoiceResult({ resultData }: FoodChoiceResultProps) 
                   href={`https://www.google.com/search?q=${encodeURIComponent(resultData.name)}&tbm=isch`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-primary"
+                  className="btn btn-success"
                 >
                   더 많은 {resultData.name} 사진 보기
                 </a>
@@ -47,11 +47,10 @@ export default function FoodChoiceResult({ resultData }: FoodChoiceResultProps) 
             </div>
             <div className="flex flex-row justify-center">
               <Link href="/main" passHref>
-                <button className="btn btn-primary">홈으로 이동</button>
+                <button className="btn btn-success">홈으로 이동</button>
               </Link>
-
               <Link href="/foodchoice" passHref>
-                <button className="btn btn-primary">다시하기</button>
+                <button className="btn btn-success">다시하기</button>
               </Link>
             </div>
           </div>
