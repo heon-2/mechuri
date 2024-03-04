@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Option } from '@/app/roulette/page';
+import { FoodData } from '@/app/roulette/page';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,7 +14,7 @@ import {
 
 interface ResultModalProps {
   onClose: () => void;
-  result: Option | null;
+  result: FoodData | null;
   open: boolean;
 }
 
@@ -26,7 +26,7 @@ export default function ResultModal({ onClose, result, open }: ResultModalProps)
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>오늘의 추천 메뉴는?</AlertDialogTitle>
-            <AlertDialogDescription>{result?.option}</AlertDialogDescription>
+            <AlertDialogDescription>{result?.name}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={onClose}>다시</AlertDialogCancel>
