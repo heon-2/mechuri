@@ -200,10 +200,18 @@ export default function Roulette() {
   };
 
   return (
-    <div className="flex flex-row items-center">
+    <div className="flex justify-around items-center">
       {/* 룰렛과 버튼들 그리드 짜기 */}
-      <div className="flex flex-col items-center justify-center">
-        <canvas className="" ref={canvasRef} />
+      <div className="flex flex-col items-center justify-center roulette-container relative">
+        <canvas className="relative z-10" ref={canvasRef} />
+        <Image
+          src="/images/arrow.png"
+          alt="arrow"
+          width={90}
+          height={90}
+          className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-20 ml-10 rotate-[10deg]"
+          style={{ marginTop: '-20px' }}
+        ></Image>
         <div className="justify-around mt-4 z-10">
           <button
             onClick={rotate}
