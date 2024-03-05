@@ -1,7 +1,9 @@
 'use client';
 
+import { currentLatState, currentLngState } from '@/stores/atoms/currentLocState';
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 
 // declare global {
 //   interface Window {
@@ -35,8 +37,10 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [markers, setMakrers] = useState<any[]>([]);
+  const currentLat = useRecoilValue(currentLatState);
+  const currentLng = useRecoilValue(currentLngState);
 
-  const url = `https://dapi.kakao.com/v2/local/search/keyword?query=${keywordInput}&page=${currentPage}&size=${pageSize}`;
+  const url = `https://dapi.kakao.com/v2/local/search/keyword?query=${keywordInput}&page=${currentPage}&size=${pageSize}&x=${currentLng}&y=${currentLat}&radius=${10000}`;
 
   const handleSearch = async () => {
     try {
