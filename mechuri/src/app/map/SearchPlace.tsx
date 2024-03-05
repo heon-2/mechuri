@@ -1,6 +1,6 @@
 'use client';
 
-import { currentLatState, currentLngState } from '@/stores/atoms/currentLocState';
+import { currentLatState, currentLngState } from '@/stores/atoms/mapState';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';

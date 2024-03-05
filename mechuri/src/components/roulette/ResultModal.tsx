@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { FoodData } from '@/app/roulette/page';
+import Link from 'next/link';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,7 +31,9 @@ export default function ResultModal({ onClose, result, open }: ResultModalProps)
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={onClose}>다시</AlertDialogCancel>
-            <AlertDialogAction>결정</AlertDialogAction>
+            <Link href="/map">
+              <AlertDialogAction>지도</AlertDialogAction>
+            </Link>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

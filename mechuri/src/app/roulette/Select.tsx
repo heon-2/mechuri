@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRecoilState } from 'recoil';
-import { categoryState } from '@/stores/atoms/categoryState';
+import { categoryState } from '@/stores/atoms/rouletteState';
 import korean from '../../../public/images/korean.png';
 import japanese from '../../../public/images/japanese.png';
 import chinese from '../../../public/images/chinese.png';

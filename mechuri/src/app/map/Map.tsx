@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Search from './Search';
 import SearchPlace from './SearchPlace';
 import { useRecoilState } from 'recoil';
-import { currentLatState, currentLngState } from '@/stores/atoms/currentLocState';
+import { currentLatState, currentLngState } from '@/stores/atoms/mapState';
 
 declare global {
   interface Window {
