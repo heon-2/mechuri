@@ -29,6 +29,21 @@ export default function FoodTest() {
   const [questionnaire, setQuestionnaire] = useState<Questionnaire[]>([]);
   const totalStep = questionnaire.length; // 전체 질문 개수.
   const router = useRouter();
+  const sendAnswers = async () => {
+    const response = await fetch('/api/foodchoice', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ answers }),
+    });
+
+    if (response.ok) {
+      const { foodId: resultFoodId } = await response.json();
+      router.push(`/foodchoice/result/${resultFoodId}`);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,24 +64,9 @@ export default function FoodTest() {
   useEffect(() => {
     // 모든 질문에 대한 답변이 완료되었을 때만 서버로 데이터를 전송
     if (answers.length === questionnaire.length && questionnaire.length > 0) {
-      const sendAnswers = async () => {
-        const response = await fetch('/api/foodchoice', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ answers }),
-        });
-
-        if (response.ok) {
-          const { foodId: resultFoodId } = await response.json();
-          router.push(`/foodchoice/result/${resultFoodId}`);
-        }
-      };
-
       sendAnswers();
     }
-  }, [answers, questionnaire.length, router]);
+  }, [answers]);
 
   const handleClick = async (selectedAnswerId: number) => {
     const selectedAnswer = currentQuestion?.Answers.find(
@@ -78,10 +78,8 @@ export default function FoodTest() {
         shortQuestion: currentQuestion.Question.shortQuestion,
         shortAnswer: selectedAnswer.shortAnswer,
       };
-
       setAnswers((prevAnswers) => [...prevAnswers, newAnswer]);
     }
-
     if (step < questionnaire.length) {
       setStep((currentStep) => currentStep + 1);
     }
