@@ -110,7 +110,10 @@ export default function FoodTest() {
             >
               <div className="h-full w-full flex flex-col items-center justify-center gap-10">
                 {/* 선택지 내용 */}
-                <img className="rounded-xl h-2/3" src={answer.image} alt="Sample Image" />
+                {answer.image && (
+                  <img className="rounded-xl h-2/3" src={answer.image} alt="Sample Image" />
+                )}
+
                 <div className="font-semibold text-4xl">{answer.longAnswer}</div>
               </div>
             </div>

@@ -8,12 +8,14 @@ interface ResultFoodData {
   _id: string;
   foodId: number;
   name: string;
-  foodTypePreference: string;
+  foodFeeling: string;
   soupPreference: string;
   noodlesOrRice: string;
   meatOrSeafood: string;
-  diningCompanion: string;
-  leastFavoriteCuisine: string;
+  mealTime: string[];
+  isRedColor: string;
+  imageUrl: string;
+  category: string;
 }
 
 export default function FoodChoiceResult({ resultData }: FoodChoiceResultProps) {
@@ -21,10 +23,7 @@ export default function FoodChoiceResult({ resultData }: FoodChoiceResultProps) 
     <div className="flex justify-center items-center h-full w-screen">
       <div className="card w-1/4 h-5/6 glass">
         <figure>
-          <img
-            src={'https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg'}
-            alt="car!"
-          />
+          <img src={resultData?.imageUrl} alt="car!" />
         </figure>
         <div className="card-body flex justify-evenly">
           <div className="flex flex-col justify-center text-center gap-4">
