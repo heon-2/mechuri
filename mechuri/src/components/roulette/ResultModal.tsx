@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { FoodData } from '@/app/roulette/page';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,6 +20,8 @@ interface ResultModalProps {
 }
 
 export default function ResultModal({ onClose, result, open }: ResultModalProps) {
+  const router = useRouter();
+
   return (
     <div>
       <AlertDialog open={open} onOpenChange={onClose}>
@@ -31,9 +33,9 @@ export default function ResultModal({ onClose, result, open }: ResultModalProps)
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={onClose}>다시</AlertDialogCancel>
-            <Link href="/map">
-              <AlertDialogAction>지도</AlertDialogAction>
-            </Link>
+            <AlertDialogAction onClick={() => router.push(`/map?search=${result?.name}`)}>
+              지도
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -4,7 +4,7 @@ import arrow from '../../../public/images/arrow.png';
 import Image from 'next/image';
 import ResultModal from '@/components/roulette/ResultModal';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { categoryState, resultState } from '@/stores/atoms/rouletteState';
+import { categoryState } from '@/stores/atoms/rouletteState';
 
 export interface FoodData {
   _id: string;
@@ -27,7 +27,6 @@ export default function Roulette() {
   const [rouletteSize, setRouletteSize] = useState<number>(10); // 룰렛 칸 개수 초기값 설정
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectCategory, setSelectCategory] = useRecoilState(categoryState);
-  const setResult = useSetRecoilState(resultState);
 
   const colors = [
     '#dc0936',
@@ -91,7 +90,6 @@ export default function Roulette() {
     setRouletteSize(10);
     randomDataRoulette();
     setSelectedItem(null);
-    setResult('');
   };
 
   useEffect(() => {
@@ -188,7 +186,6 @@ export default function Roulette() {
 
       setTimeout(() => {
         setSelectedItem(rouletteData[ran]);
-        setResult(rouletteData[ran].name);
         setModalOpen(true);
       }, 2000);
     }, 10);
