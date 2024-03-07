@@ -36,7 +36,7 @@ export default function ResultModal({ onClose, result, open }: ResultModalProps)
                 <img
                   src={result.imageUrl}
                   alt={result.name}
-                  className="w-4/5 aspect-[40/31] my-4 rounded-3xl"
+                  className="w-5/6 aspect-[40/31] my-4 rounded-3xl"
                 ></img>
               )}
             </div>
@@ -46,14 +46,14 @@ export default function ResultModal({ onClose, result, open }: ResultModalProps)
           </AlertDialogHeader>
           <div className="flex justify-center items-center space-x-4">
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={onClose} className="py-3 px-10 rounded-lg">
-                다시
+              <AlertDialogCancel onClick={onClose} className="w-40 rounded-lg">
+                다시하기
               </AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => router.push(`/map?search=${result?.name}`)}
-                className="py-3 px-10 rounded-lg"
+                className="w-40 rounded-lg bg-[#FF856B]"
               >
-                지도
+                음식점 찾기
               </AlertDialogAction>
             </AlertDialogFooter>
           </div>

@@ -27,48 +27,11 @@ export default function Roulette() {
   const [rouletteSize, setRouletteSize] = useState<number>(10); // 룰렛 칸 개수 초기값 설정
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectCategory, setSelectCategory] = useRecoilState(categoryState);
-  const colors = [
-    '#dc0936',
-    '#e6471d',
-    '#f7a416',
-    '#efe61f',
-    '#60b236',
-    '#209b6c',
-    '#169ed8',
-    '#3f297e',
-    '#87207b',
-    '#be107f',
-    '#e7167b',
-  ];
+  const colors = ['#F97B22', '#FEE8B0'];
 
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const handleClick = (event: any) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = event.clientX - rect.left - canvas.width / 2;
-      const y = event.clientY - rect.top - canvas.height / 2;
-      const distanceFromCenter = Math.sqrt(x * x + y * y);
-      const centerRadius = 40;
-
-      if (distanceFromCenter < centerRadius) {
-        rotate(); // 룰렛 회전
-      }
-    };
-
-    canvas.addEventListener('click', handleClick);
-
-    return () => {
-      canvas.removeEventListener('click', handleClick);
-    };
-  }, [rouletteData, rouletteSize]);
 
   const fetchData = async () => {
     try {
@@ -129,8 +92,8 @@ export default function Roulette() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = 400;
-    canvas.height = 400;
+    canvas.width = 470;
+    canvas.height = 470;
     const [cw, ch] = [canvas.width / 2, canvas.height / 2];
     const radius = cw - 10; // 룰렛의 반지름
     const arc = (2 * Math.PI) / rouletteData.length;
@@ -147,8 +110,8 @@ export default function Roulette() {
 
       // Text
       ctx.save();
-      ctx.fillStyle = '#fff';
-      ctx.font = '16px Arial';
+      ctx.fillStyle = '#fefefe';
+      ctx.font = '18px Arial';
       ctx.translate(
         cw + (Math.cos(arc * i + arc / 2) * radius) / 1.5,
         ch + (Math.sin(arc * i + arc / 2) * radius) / 1.5,
@@ -182,15 +145,6 @@ export default function Roulette() {
     ctx.arc(cw, ch, centerRadius, 0, 2 * Math.PI);
     ctx.fillStyle = 'black'; // 중앙 원의 색상, 필요에 따라 변경 가능
     ctx.fill();
-
-    // 텍스트 설정을 위한 스타일 지정
-    ctx.fillStyle = 'white'; // 글씨 색상
-    ctx.font = '16px Arial'; // 글씨 크기와 폰트
-    ctx.textAlign = 'center'; // 가운데 정렬
-    ctx.textBaseline = 'middle'; // 중앙 기준선
-
-    // 중앙에 텍스트 그리기
-    ctx.fillText('Spin', cw, ch); // cw와 ch는 캔버스의 중앙 좌표
   };
 
   const rotate = () => {
@@ -233,10 +187,18 @@ export default function Roulette() {
   };
 
   return (
-    <div className="flex justify-around items-center">
+    <div className="flex justify-between items-center">
       {/* 룰렛과 버튼들 그리드 짜기 */}
       <div className="flex flex-col items-center justify-center roulette-container relative">
-        <canvas className="relative z-10" ref={canvasRef} />
+        <canvas className="relative z-10 h-full w-full" ref={canvasRef} />
+        <div className="absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <button
+            onClick={rotate}
+            className="bg-[#FF856B] text-white text-xl w-20 h-20 rounded-full "
+          >
+            SPIN
+          </button>
+        </div>
         <Image
           src="/images/arrow.png"
           alt="arrow"
@@ -245,7 +207,7 @@ export default function Roulette() {
           className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-20 ml-10 rotate-[15deg]"
           style={{ marginTop: '-20px' }}
         ></Image>
-        <div className="justify-around mt-4 z-10">
+        {/* <div className="justify-around mt-4 z-10">
           <button
             onClick={rotate}
             className="bg-blue-500 text-white px-5 py-2 rounded-md mr-2 ml-2"
@@ -255,22 +217,30 @@ export default function Roulette() {
           <button onClick={resetRoulette} className="bg-red-500 text-white px-4 py-2 rounded-md ">
             RESET
           </button>
-        </div>
+        </div> */}
       </div>
-      <div className="flex justify-center items-center z-10">
+      <div className="flex flex-col gap-4">
         <button
-          onClick={removeItems}
-          className="bg-green-500 text-white px-4 py-2 rounded-md mr-2 text-3xl "
+          onClick={resetRoulette}
+          className="bg-[#FF856B] text-white text-xl px-4 py-2 rounded-md "
         >
-          -
+          RESET
         </button>
-        <p className="mr-2 text-3xl">{rouletteSize}/10</p>
-        <button
-          onClick={addItems}
-          className="bg-yellow-500 text-white px-4 py-2 rounded-md text-3xl"
-        >
-          +
-        </button>
+        <div className="flex justify-center items-center z-10">
+          <button
+            onClick={removeItems}
+            className="bg-green-500 text-white w-12 h-12 rounded-md mr-2 text-4xl "
+          >
+            -
+          </button>
+          <p className="mr-2 text-3xl">{rouletteSize}/10</p>
+          <button
+            onClick={addItems}
+            className="bg-yellow-500 text-white w-12 h-12 rounded-md text-4xl"
+          >
+            +
+          </button>
+        </div>
       </div>
       <ResultModal
         result={selectedItem}
