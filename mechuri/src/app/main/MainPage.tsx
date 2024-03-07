@@ -23,11 +23,11 @@ export default function MainPage() {
           clickable: true,
         }}
         autoHeight={true}
-        modules={[Pagination, Navigation, Mousewheel, Autoplay]}
-        autoplay={{
-          delay: 8000,
-          disableOnInteraction: false,
-        }}
+        // modules={[Pagination, Navigation, Mousewheel, Autoplay]}
+        // autoplay={{
+        //   delay: 8000,
+        //   disableOnInteraction: false,
+        // }}
         slidesPerView={1}
         onSlideChange={() => console.log('slide change')}
         onSwiper={(swiper) => console.log(swiper)}

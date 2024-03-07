@@ -31,11 +31,12 @@ export default function NavBar() {
   ];
 
   return (
-    // <nav className="bg-[#CCD3CA] border-gray-200 dark:bg-gray-900 w-full h-16">
+    // <nav className="bg-[#E2BFB3] border-gray-200 dark:bg-gray-900 w-full h-16">
     // <nav className="bg-[#FFBE98] border-gray-200 dark:bg-gray-900 w-full h-16">
-    <nav className="bg-[#FFBE98] border-gray-200 dark:bg-gray-900 w-full h-16">
+    <nav className="bg-[#f6f6f6] border-gray-200 dark:bg-gray-900 w-full h-16">
+      {/* <nav className="bg-[#F2C18D] border-gray-200 dark:bg-gray-900 w-full h-16"> */}
       <div className="flex items-center h-full justify-between mx-20">
-        <span className="self-center text-3xl font-semibold whitespace-nowrap text-[#ffffff]">
+        <span className="self-center text-3xl font-semibold whitespace-nowrap text-[#FF5A5F]">
           Mechuri
         </span>
 
@@ -45,9 +46,8 @@ export default function NavBar() {
               <li key={component.href}>
                 <a
                   href={component.href}
-                  className={`block py-2 px-3 rounded md:p-0 font-semibold text-lg  ${
-                    index === 0 ? 'text-[#F08A5D] ' : 'text-white'
-                  }`}
+                  className={`block py-2 px-3 rounded md:p-0 font-medium text-lg  
+                  ${index === 0 ? 'text-[#FF5A5F] ' : 'text-[#FF5A5F]'}`}
                 >
                   {component.title}
                 </a>

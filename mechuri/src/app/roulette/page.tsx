@@ -192,7 +192,7 @@ export default function page() {
   return (
     <div className="h-screen">
       <NavBar></NavBar>
-      <div className="grid grid-cols-3 items-center justify-center h-[calc(100vh-4rem)]">
+      <div className="grid grid-cols-3 items-center justify-center h-[calc(100vh-4rem)] bg-[#f6f6f6]">
         <div className="flex justify-center items-center">
           <Select></Select>
         </div>
