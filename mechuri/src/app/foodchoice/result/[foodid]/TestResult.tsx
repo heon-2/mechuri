@@ -3,12 +3,14 @@ interface ResultFoodData {
   _id: string;
   foodId: number;
   name: string;
-  foodTypePreference: string;
+  foodFeeling: string;
   soupPreference: string;
   noodlesOrRice: string;
   meatOrSeafood: string;
-  diningCompanion: string;
-  leastFavoriteCuisine: string;
+  mealTime: string[];
+  isRedColor: string;
+  imageUrl: string;
+  category: string;
 }
 interface ResultPageProps {
   foodId: Number;
@@ -41,8 +43,9 @@ export default function TestResult({ foodId }: ResultPageProps) {
     };
     fetchData();
   }, [foodId]);
+
   return (
-    <div>
+    <div className="h-[calc(100vh-4rem)] bg-[#FEECE2]">
       <FoodChoiceResult resultData={resultData} />
     </div>
   );

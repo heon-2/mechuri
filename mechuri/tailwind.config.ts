@@ -19,6 +19,7 @@ const config = {
     },
     extend: {
       colors: {
+        main: '#258fff',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -57,6 +58,16 @@ const config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        custom: '50px', // 뉴모피즘
+      },
+      backgroundImage: {
+        'gradient-custom1': 'linear-gradient(145deg, #e6e6e6, #ffffff)', // 뉴모피즘
+        'gradient-custom2': 'linear-gradient(145deg, #ffffff, #e6e6e6)',
+      },
+      boxShadow: {
+        custom1: '20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff', // 뉴모피즘,
+        custom2: 'inset 20px 20px 60px #d9d9d9, inset -20px -20px 60px #ffffff', // 사용자 정의 boxShadow
+        custom3: '20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff',
       },
       keyframes: {
         'accordion-down': {
