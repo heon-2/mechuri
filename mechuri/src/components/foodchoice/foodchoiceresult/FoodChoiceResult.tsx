@@ -21,35 +21,42 @@ interface ResultFoodData {
 export default function FoodChoiceResult({ resultData }: FoodChoiceResultProps) {
   return (
     <div className="flex justify-center items-center h-full w-screen">
-      <div className="card w-1/4 h-5/6 glass">
-        <figure>
-          <img src={resultData?.imageUrl} alt="car!" />
+      <div className="card w-1/4 h-5/6 glass ">
+        <figure className="h-1/2">
+          <img src={resultData?.imageUrl} alt="food image" />
         </figure>
         <div className="card-body flex justify-evenly">
           <div className="flex flex-col justify-center text-center gap-4">
-            <div className="text-2xl">메뉴 추천 테스트의 결과는?!</div>
-            <div className="text-3xl font-bold">{resultData && resultData.name}</div>
-            <div className="text-xl">오늘의 메뉴는 {resultData && resultData.name} 어때요?</div>
+            <div className="text-2xl text-gray-800">메뉴 추천 테스트의 결과는?!</div>
+            <div className="text-3xl font-bold text-[#FF856B]">{resultData && resultData.name}</div>
+            <div className="text-xl text-gray-800">
+              오늘의 메뉴는 {resultData && resultData.name} 어때요?
+            </div>
           </div>
           <div className="card-actions justify-center flex flex-col items-center">
-            <div>
+            {/* <div>
               {resultData && (
                 <a
                   href={`https://www.google.com/search?q=${encodeURIComponent(resultData.name)}&tbm=isch`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-success"
+                  className="btn bg-[#FF856B] text-white"
                 >
                   더 많은 {resultData.name} 사진 보기
                 </a>
               )}
+            </div> */}
+            <div>
+              <Link href="/main" passHref>
+                <button className="btn bg-[#FF856B] text-white">음식점 찾기</button>
+              </Link>
             </div>
             <div className="flex flex-row justify-center">
               <Link href="/main" passHref>
-                <button className="btn btn-success">홈으로 이동</button>
+                <button className="btn bg-[#FF856B] text-white">홈으로 이동</button>
               </Link>
               <Link href="/foodchoice" passHref>
-                <button className="btn btn-success">다시하기</button>
+                <button className="btn bg-[#FF856B] text-white">다시하기</button>
               </Link>
             </div>
           </div>
