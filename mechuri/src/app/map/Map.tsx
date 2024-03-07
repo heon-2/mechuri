@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import Search from './Search';
 import SearchPlace from './SearchPlace';
+import { useSetRecoilState } from 'recoil';
+import { currentLatState, currentLngState } from '@/stores/atoms/currentLocState';
 
 declare global {
   interface Window {
@@ -13,6 +15,8 @@ declare global {
 export default function Map() {
   const [map, setMap] = useState<any>(null);
   const [marker, setMarker] = useState<any>(null);
+  const setCurrentLat = useSetRecoilState(currentLatState);
+  const setCurrentLng = useSetRecoilState(currentLngState);
 
   useEffect(() => {
     const mapScript = document.createElement('script');
@@ -39,6 +43,14 @@ export default function Map() {
             position.coords.latitude,
             position.coords.longitude,
           );
+          setCurrentLat(position.coords.latitude);
+          setCurrentLng(position.coords.longitude);
+
+          const imageSrc =
+            'https://velog.velcdn.com/images/cjjss11/post/21397cb6-1934-4c7a-aea9-d5c8ddfea157/image.png';
+          const imageSize = new window.kakao.maps.Size(64, 69);
+          const imageOption = { offset: new window.kakao.maps.Point(27, 69) };
+          const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
 
           if (map === null) {
             // 지도 생성
@@ -51,8 +63,10 @@ export default function Map() {
             const newMap = new window.kakao.maps.Map(mapContainer, mapOption);
             setMap(newMap);
             // 결과값을 마커로 표시
+            // 마커 처음 생성하는 곳
             const newMarker = new window.kakao.maps.Marker({
               position: latlng,
+              image: markerImage,
             });
             // 지도의 중심을 결과값으로 받은 위치로 이동
             newMarker.setMap(newMap);
@@ -61,14 +75,15 @@ export default function Map() {
             map.setCenter(latlng);
 
             if (marker) {
-              marker.setPosition(latlng);
-            } else {
-              const newMarker = new window.kakao.maps.Marker({
-                position: latlng,
-              });
-              newMarker.setMap(map);
-              setMarker(newMarker);
+              marker.setMap(null);
             }
+            // 현재 위치 버튼 클릭 시 마커 생성하는 곳
+            const newMarker = new window.kakao.maps.Marker({
+              position: latlng,
+              image: markerImage,
+            });
+            newMarker.setMap(map);
+            setMarker(newMarker);
           }
         },
         (error) => {

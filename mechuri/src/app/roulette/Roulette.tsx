@@ -3,6 +3,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import arrow from '../../../public/images/arrow.png';
 import Image from 'next/image';
 import ResultModal from '@/components/roulette/ResultModal';
+import { useRecoilState } from 'recoil';
+import { categoryState } from '@/stores/atoms/categoryState';
 
 export interface FoodData {
   _id: string;
@@ -14,15 +16,17 @@ export interface FoodData {
   meatOrSeafood: string;
   diningCompanion: string;
   leastFavoriteCuisine: string;
+  category: string;
 }
 
 export default function Roulette() {
   const [data, setData] = useState<FoodData[]>([]);
   const [rouletteData, setRouletteData] = useState<FoodData[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] = useState<FoodData | null>(null);
   const [rouletteSize, setRouletteSize] = useState<number>(10); // 룰렛 칸 개수 초기값 설정
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [selectCategory, setSelectCategory] = useRecoilState(categoryState);
 
   const colors = [
     '#dc0936',
@@ -60,19 +64,30 @@ export default function Roulette() {
     if (data.length > 0) {
       randomDataRoulette();
     }
-  }, [data, rouletteSize]);
+  }, [data, rouletteSize, selectCategory]);
 
   const randomDataRoulette = () => {
-    const selectedItems = [];
-    const clonedData = [...data];
-    for (let i = 0; i < Math.min(rouletteSize, clonedData.length); i++) {
+    let filteredData = data;
+
+    if (selectCategory) {
+      filteredData = data.filter((item) => item.category === selectCategory);
+    }
+    const size = Math.min(rouletteSize, filteredData.length);
+    const selectedItems: FoodData[] = [];
+    const clonedData = [...filteredData];
+    for (let i = 0; i < size; i++) {
       const randomIndex = Math.floor(Math.random() * clonedData.length);
       selectedItems.push(clonedData.splice(randomIndex, 1)[0]);
     }
     setRouletteData(selectedItems);
+    console.log('rouletteData', rouletteData);
+    console.log('category', selectCategory);
+    console.log('ddfdf', filteredData);
   };
 
   const resetRoulette = () => {
+    setSelectCategory('');
+    setRouletteSize(10);
     randomDataRoulette();
     setSelectedItem(null);
   };
@@ -121,7 +136,7 @@ export default function Roulette() {
       ctx.beginPath();
       ctx.moveTo(cw, ch);
       ctx.arc(cw, ch, radius, arc * i, arc * (i + 1), false);
-      ctx.lineWidth = 8; // 선의 두께를 지정합니다.
+      ctx.lineWidth = 6; // 선의 두께를 지정합니다.
       ctx.strokeStyle = 'black'; // 선의 색상을 지정합니다.
       ctx.stroke();
     }
@@ -170,8 +185,8 @@ export default function Roulette() {
       canvas.style.transform = `rotate(-${rotate}deg)`;
 
       setTimeout(() => {
-        setSelectedItem(rouletteData[ran].name);
-        alert(`오늘의 야식은?! ${rouletteData[ran].name} 어떠신가요?`);
+        setSelectedItem(rouletteData[ran]);
+        setModalOpen(true);
       }, 2000);
     }, 10);
   };
@@ -185,11 +200,11 @@ export default function Roulette() {
   };
 
   return (
-    <div>
+    <div className="flex flex-row items-center">
       {/* 룰렛과 버튼들 그리드 짜기 */}
       <div className="flex flex-col items-center justify-center">
-        <canvas ref={canvasRef} />
-        <div className="justify-around mt-4">
+        <canvas className="" ref={canvasRef} />
+        <div className="justify-around mt-4 z-10">
           <button
             onClick={rotate}
             className="bg-blue-500 text-white px-5 py-2 rounded-md mr-2 ml-2"
@@ -201,10 +216,10 @@ export default function Roulette() {
           </button>
         </div>
       </div>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center z-10">
         <button
           onClick={removeItems}
-          className="bg-green-500 text-white px-4 py-2 rounded-md mr-2 text-2xl"
+          className="bg-green-500 text-white px-4 py-2 rounded-md mr-2 text-2xl "
         >
           -
         </button>
