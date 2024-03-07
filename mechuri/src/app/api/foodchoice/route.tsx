@@ -42,8 +42,23 @@ export async function POST(request: NextRequest) {
     // 쿼리 조건 객체 생성
     const queryConditions: { [key: string]: any } = receivedAnswers.reduce(
       (acc, curr) => {
-        // vegetablePreference가 'no'인 경우 제외 로직 추가 ( '상관없음'이기 떄문에 제외해야함 )
-        if (!(curr.shortQuestion === 'vegetablePreference' && curr.shortAnswer === 'no')) {
+        if (curr.shortQuestion === 'noodlesOrRice' || curr.shortQuestion === 'meatOrSeafood') {
+          // 이미 '$or' 조건이 설정되어 있으면 추가하지 않고, 현재 조건을 '$or' 배열에 추가
+          if (!acc['$or']) {
+            acc['$or'] = [];
+          }
+          acc['$or'].push(
+            { [curr.shortQuestion]: curr.shortAnswer },
+            { [curr.shortQuestion]: 'etc' },
+          );
+        } else if (curr.shortQuestion === 'mealTime') {
+          // 'mealTime'이 배열 내에 포함되어 있는지 확인
+          acc[curr.shortQuestion] = { $in: [curr.shortAnswer] };
+        } else if (curr.shortQuestion === 'category') {
+          // 'category'를 받은 값 제외하고 조회
+          acc[curr.shortQuestion] = { $ne: curr.shortAnswer };
+        } else {
+          // 나머지 경우는 직접 조건에 추가
           acc[curr.shortQuestion] = curr.shortAnswer;
         }
         return acc;
@@ -78,7 +93,7 @@ export async function POST(request: NextRequest) {
       });
     } else {
       console.log(queryConditions);
-      return new Response(JSON.stringify({ error: 'No matching food found' }), {
+      return new Response(JSON.stringify({ error: '매칭된 메뉴가 없습니다.' }), {
         status: 404,
         headers: { 'Content-Type': 'application/json' },
       });
