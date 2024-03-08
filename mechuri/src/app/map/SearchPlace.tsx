@@ -116,9 +116,16 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
 
     const newMarkers = places.map((place) => {
       const position = new window.kakao.maps.LatLng(place.y, place.x);
+
+      const imageSrc =
+        'https://velog.velcdn.com/images/cjjss11/post/4f2f52d8-e6b8-4d14-a8d6-4ea2b0a73f67/image.png';
+      const imageSize = new window.kakao.maps.Size(43, 45);
+      const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+
       const marker = new window.kakao.maps.Marker({
         position: position,
         map: map,
+        image: markerImage,
       });
 
       return marker;
@@ -253,8 +260,9 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
   // }, [map, markers]);
 
   return (
-    <div>
-      <label className="input input-bordered flex items-center gap-2 w-[500px]">
+    <div className="flex flex-col items-center">
+      {/* <div className="bg-gray-300 w-full h-full flex flex-col items-center"> */}
+      <label className="input input-bordered flex items-center gap-2 w-5/6 mt-3">
         <input
           type="text"
           value={keywordInput}
@@ -298,7 +306,7 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
           </tbody>
         </table>
       </div>
-      <div className="join">
+      <div className="join mt-3 mb-3">
         {Array.from({ length: totalPage }, (_, i) => (
           <button
             key={i + 1}
@@ -308,6 +316,7 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
             {i + 1}
           </button>
         ))}
+        {/* </div> */}
       </div>
       {/* <ul>
         {places.map((place, index) => (
