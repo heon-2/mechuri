@@ -1,9 +1,10 @@
 'use client';
 
-import { currentLatState, currentLngState } from '@/stores/atoms/currentLocState';
+import { currentLatState, currentLngState } from '@/stores/atoms/mapState';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useSearchParams } from 'next/navigation';
 
 // declare global {
 //   interface Window {
@@ -39,10 +40,18 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
   const [markers, setMakrers] = useState<any[]>([]);
   const currentLat = useRecoilValue(currentLatState);
   const currentLng = useRecoilValue(currentLngState);
+  const searchParams = useSearchParams();
+  const search = searchParams.get('search');
 
-  const url = `https://dapi.kakao.com/v2/local/search/keyword?query=${keywordInput}&page=${currentPage}&size=${pageSize}&x=${currentLng}&y=${currentLat}&radius=${10000}`;
+  useEffect(() => {
+    if (search && currentLat && currentLng) {
+      setKeywordInput(search);
+      handleSearch(search);
+    }
+  }, [search, currentLat, currentLng]);
 
-  const handleSearch = async () => {
+  const handleSearch = async (keyword: string = keywordInput) => {
+    const url = `https://dapi.kakao.com/v2/local/search/keyword?query=${keyword}&page=${currentPage}&size=${pageSize}&x=${currentLng}&y=${currentLat}&radius=${10000}`;
     try {
       const response = await fetch(url, {
         method: 'GET',
@@ -96,7 +105,7 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
 
   useEffect(() => {
     handleSearch();
-  }, [currentPage]);
+  }, [search, currentPage]);
 
   useEffect(() => {
     displayMarkers();
@@ -259,7 +268,7 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
           viewBox="0 0 16 16"
           fill="currentColor"
           className="w-4 h-4 opacity-70"
-          onClick={handleSearch}
+          onClick={() => handleSearch}
         >
           <path
             fillRule="evenodd"
