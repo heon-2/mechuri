@@ -19,7 +19,10 @@ const config = {
     },
     extend: {
       colors: {
-        main: '#258fff',
+        mainColor: '#FF5A5F',
+        buttonColor: '#FF5A5F',
+        subColor: '#258fff',
+        textColor: '#000000',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

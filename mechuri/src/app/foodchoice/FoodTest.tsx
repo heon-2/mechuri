@@ -87,10 +87,10 @@ export default function FoodTest() {
   const currentQuestion = questionnaire[step - 1];
   return (
     // calc을 사용한 높이 조절 -> 3rem은 NavBar의 높이
-    <div className="grid grid-rows-5 w-screen h-[calc(100%-4rem)] bg-[#FEECE2]">
+    <div className="grid grid-rows-5 w-screen h-[calc(100%-4rem)] bg-[#f6f6f6]">
       {/* 질문 표시 */}
       {currentQuestion && (
-        <div className="row-span-1 flex items-center justify-center w-screen font-bold text-5xl text-gray-800">
+        <div className="row-span-1 flex items-center justify-center w-screen font-bold text-5xl text-text">
           Q{step}. {currentQuestion?.Question?.longQuestion}
         </div>
       )}
