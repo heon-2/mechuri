@@ -5,6 +5,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 // declare global {
 //   interface Window {
@@ -260,53 +261,60 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
   // }, [map, markers]);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col">
       {/* <div className="bg-gray-300 w-full h-full flex flex-col items-center"> */}
-      <label className="input input-bordered flex items-center gap-2 w-5/6 mt-3">
-        <input
-          type="text"
-          value={keywordInput}
-          onChange={(e) => setKeywordInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          className="grow"
-          placeholder="키워드를 입력해주세요"
-        />
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 16 16"
-          fill="currentColor"
-          className="w-4 h-4 opacity-70"
-          onClick={() => handleSearch}
-        >
-          <path
-            fillRule="evenodd"
-            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-            clipRule="evenodd"
+      <div className="flex justify-center mt-5 mb-5">
+        <label className="input input-bordered flex items-center gap-2 w-5/6 border-2 border-mainColor">
+          <input
+            type="text"
+            value={keywordInput}
+            onChange={(e) => setKeywordInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="grow"
+            placeholder="키워드를 입력해주세요"
           />
-        </svg>
-      </label>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            className="w-6 h-6 opacity-70 cursor-pointer"
+            onClick={() => handleSearch}
+          >
+            <path
+              fillRule="evenodd"
+              d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </label>
+      </div>
+
       <div className="overflow-x-auto">
         <table className="table w-full">
           {/* head */}
-          <thead>
-            <tr>
-              <th></th>
-              <th>Name</th>
-              <th>Address</th>
-            </tr>
-          </thead>
           <tbody>
             {places.map((place, index) => (
-              <tr key={index}>
-                <th>{index + 1}</th>
-                <td>{place.place_name}</td>
-                <td>{place.address_name}</td>
+              <tr key={index} className="align-top hover:bg-gray-200">
+                <td className="py-3">
+                  <div className="flex items-center gap-4 mb-1">
+                    <Link href={place.place_url}>
+                      <div className="text-2xl text-mainColor">{place.place_name}</div>
+                    </Link>
+                    <div className="text-md mt-1">{place.category_name.split('>').pop()}</div>
+                  </div>
+                  <div className="flex gap-1">
+                    <div>{place.road_address_name}</div>
+                    <div className="font-bold">({place.distance}m)</div>
+                  </div>
+                  <div>(지번){place.address_name}</div>
+                  <div>{place.phone}</div>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <div className="join mt-3 mb-3">
+      <div className="join mt-3 mb-3 flex justify-center">
         {Array.from({ length: totalPage }, (_, i) => (
           <button
             key={i + 1}
