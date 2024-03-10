@@ -63,21 +63,16 @@ export default function FoodTest() {
   // }, []);
 
   // React-Query Test Code
-  const fetchData = async () => {
+  const getQuestionnaire = async () => {
     const response = await fetch('/api/foodchoice');
     if (!response.ok) {
       throw new Error('에러가 발생했습니다.');
     }
-    return await response.json(); // 이 부분이 중요
+    return await response.json();
   };
-  const {
-    data: questionnaire,
-    isLoading,
-    isError,
-    isSuccess,
-  } = useQuery<Questionnaire[]>({
+  const { data: questionnaire, isLoading } = useQuery<Questionnaire[]>({
     queryKey: ['foodchoice'],
-    queryFn: fetchData,
+    queryFn: getQuestionnaire,
   });
 
   const totalStep = questionnaire?.length ?? 0; // 전체 질문 개수.
@@ -142,7 +137,6 @@ export default function FoodTest() {
                         alt="Sample Image"
                       />
                     )}
-
                     <div className="font-semibold text-4xl text-gray-800">{answer.longAnswer}</div>
                   </div>
                 </div>
