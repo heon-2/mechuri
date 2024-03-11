@@ -130,7 +130,7 @@ export default function Map() {
   return (
     <div className="relative w-screen h-[calc(100vh-4rem)]">
       <div id="map" className="w-full h-full overflow-hidden"></div>
-      <div className="bg-[#fff] w-1/3 min-h-[calc(100vh-4rem)] max-h-full overflow-y-auto flex-grow absolute top-0 left-0 z-10">
+      <div className="bg-[#fff] w-1/3 h-full overflow-y-auto flex-grow absolute top-0 left-0 z-10">
         <SearchPlace map={map}></SearchPlace>
       </div>
       <div className="absolute top-3 right-20 z-10">

@@ -261,9 +261,9 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
   // }, [map, markers]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full">
       {/* <div className="bg-gray-300 w-full h-full flex flex-col items-center"> */}
-      <div className="flex justify-center mt-5 mb-5">
+      <div className="flex justify-center mt-5 mb-5 sticky top-0 z-10">
         <label className="input input-bordered flex items-center gap-2 w-5/6 border-2 border-mainColor">
           <input
             type="text"
@@ -289,36 +289,36 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
         </label>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="flex-grow overflow-auto">
         <table className="table w-full">
           {/* head */}
           <tbody>
             {places.map((place, index) => (
               <tr key={index} className="align-top hover:bg-gray-200">
-                <td className="py-3">
-                  <div className="flex items-center gap-4 mb-1">
-                    <Link href={place.place_url}>
+                <Link href={place.place_url}>
+                  <td className="py-3">
+                    <div className="flex items-center gap-3 mb-1">
                       <div className="text-2xl text-mainColor">{place.place_name}</div>
-                    </Link>
-                    <div className="text-md mt-1">{place.category_name.split('>').pop()}</div>
-                  </div>
-                  <div className="flex gap-1">
-                    <div>{place.road_address_name}</div>
-                    <div className="font-bold">({place.distance}m)</div>
-                  </div>
-                  <div>(지번){place.address_name}</div>
-                  <div>{place.phone}</div>
-                </td>
+                      <div className="text-md mt-1">{place.category_name.split('>').pop()}</div>
+                    </div>
+                    <div className="flex gap-1">
+                      <div>{place.road_address_name}</div>
+                      <div className="font-bold">({place.distance}m)</div>
+                    </div>
+                    <div>(지번){place.address_name}</div>
+                    <div>{place.phone}</div>
+                  </td>
+                </Link>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <div className="join mt-3 mb-3 flex justify-center">
+      <div className="join mt-5 mb-4 flex justify-center sticky bottom-0 z-10">
         {Array.from({ length: totalPage }, (_, i) => (
           <button
             key={i + 1}
-            className={`join-item btn ${currentPage === i + 1 ? 'btn-active' : ''}`}
+            className={`join-item btn btn-sm ${currentPage === i + 1 ? 'bg-mainColor text-white' : ''}`}
             onClick={() => handleChangePage(i + 1)}
           >
             {i + 1}
