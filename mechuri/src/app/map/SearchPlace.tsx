@@ -43,6 +43,8 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
   const currentLng = useRecoilValue(currentLngState);
   const searchParams = useSearchParams();
   const search = searchParams.get('search');
+  const [selectedMarker, setSelectedMarker] = useState<any>(null);
+  const [infoWindow, setInfoWindow] = useState<any>(null);
 
   useEffect(() => {
     if (search && currentLat && currentLng) {
@@ -112,12 +114,46 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
     displayMarkers();
   }, [places]);
 
+  const resetMarkerAndInfoWindow = () => {
+    if (selectedMarker) {
+      selectedMarker.setImage(
+        new window.kakao.maps.MarkerImage(
+          'https://velog.velcdn.com/images/cjjss11/post/4f2f52d8-e6b8-4d14-a8d6-4ea2b0a73f67/image.png',
+          new window.kakao.maps.Size(43, 45),
+        ),
+      );
+    }
+    if (infoWindow) {
+      infoWindow.close();
+    }
+    setSelectedMarker(null);
+    setInfoWindow(null);
+  };
+
+  const handlePlaceClick = (place: any) => {
+    resetMarkerAndInfoWindow(); // 이전 마커와 인포윈도우를 초기화합니다.
+
+    // 새로운 마커와 인포윈도우를 설정합니다.
+    const selectedPlaceMarker = markers.find((m) => m.getTitle() === place.place_name);
+    if (selectedPlaceMarker) {
+      if (!infoWindow) {
+        const newInfoWindow = new window.kakao.maps.InfoWindow({
+          content: `<div style="padding:5px;font-size:12px;">${place.place_name}</div>`,
+        });
+        setInfoWindow(newInfoWindow);
+      }
+      window.kakao.maps.event.trigger(selectedPlaceMarker, 'click');
+    }
+  };
+
   const displayMarkers = () => {
     markers.forEach((marker) => marker.setMap(null));
+    if (infoWindow) {
+      infoWindow.close();
+    }
 
     const newMarkers = places.map((place) => {
       const position = new window.kakao.maps.LatLng(place.y, place.x);
-
       const imageSrc =
         'https://velog.velcdn.com/images/cjjss11/post/4f2f52d8-e6b8-4d14-a8d6-4ea2b0a73f67/image.png';
       const imageSize = new window.kakao.maps.Size(43, 45);
@@ -127,6 +163,30 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
         position: position,
         map: map,
         image: markerImage,
+        title: place.place_name,
+      });
+
+      window.kakao.maps.event.addListener(marker, 'click', () => {
+        if (selectedMarker) {
+          selectedMarker.setImage(markerImage);
+        }
+
+        marker.setImage(
+          new window.kakao.maps.MarkerImage(imageSrc, new window.kakao.maps.Size(60, 63)),
+        );
+
+        const content = `<div style="padding:5px;font-size:12px;">${place.place_name}</div>`;
+        if (!infoWindow) {
+          const newInfoWindow = new window.kakao.maps.InfoWindow({
+            content: content,
+          });
+          setInfoWindow(newInfoWindow);
+          newInfoWindow.open(map, marker);
+        } else {
+          infoWindow.setContent(content);
+          infoWindow.open(map, marker);
+        }
+        setSelectedMarker(marker);
       });
 
       return marker;
@@ -294,21 +354,25 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
           {/* head */}
           <tbody>
             {places.map((place, index) => (
-              <tr key={index} className="align-top hover:bg-gray-200">
-                <Link href={place.place_url}>
-                  <td className="py-3">
-                    <div className="flex items-center gap-3 mb-1">
-                      <div className="text-2xl text-mainColor">{place.place_name}</div>
-                      <div className="text-md mt-1">{place.category_name.split('>').pop()}</div>
-                    </div>
-                    <div className="flex gap-1">
-                      <div>{place.road_address_name}</div>
-                      <div className="font-bold">({place.distance}m)</div>
-                    </div>
-                    <div>(지번){place.address_name}</div>
-                    <div>{place.phone}</div>
-                  </td>
-                </Link>
+              <tr
+                key={index}
+                className="align-top hover:bg-gray-200"
+                onClick={() => handlePlaceClick(place)}
+              >
+                {/* <Link href={place.place_url}> */}
+                <td className="py-3">
+                  <div className="flex items-center gap-3 mb-1">
+                    <div className="text-2xl text-mainColor">{place.place_name}</div>
+                    <div className="text-md mt-1">{place.category_name.split('>').pop()}</div>
+                  </div>
+                  <div className="flex gap-1">
+                    <div>{place.road_address_name}</div>
+                    <div className="font-bold">({place.distance}m)</div>
+                  </div>
+                  <div>(지번){place.address_name}</div>
+                  <div>{place.phone}</div>
+                </td>
+                {/* </Link> */}
               </tr>
             ))}
           </tbody>
