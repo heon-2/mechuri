@@ -58,19 +58,19 @@ export default function TestResult({ foodId }: ResultPageProps) {
   const {
     data: resultData,
     isLoading,
-    isError,
     isSuccess,
   } = useQuery<ResultFoodData>({
     queryKey: ['foodchoice'],
     queryFn: fetchData,
+    refetchOnMount: true,
   });
 
   return (
     <div className="h-[calc(100vh-4rem)] bg-[#FEECE2]">
-      {isLoading ? (
-        <LoadingUi />
-      ) : (
+      {isSuccess ? (
         <>{resultData && <FoodChoiceResult resultData={resultData} />}</>
+      ) : (
+        <LoadingUi />
       )}
     </div>
   );
