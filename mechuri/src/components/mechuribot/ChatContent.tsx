@@ -90,18 +90,14 @@ export default function ChatContent() {
   }
   return (
     <div className="flex flex-col h-4/5 w-2/5 ">
-      <div className="flex-grow overflow-auto bg-slate-50">
+      <div className="flex-grow overflow-auto bg-white">
         {chat.map((c, index) => (
           <div key={index} className={`chat ${c.sender === 'bot' ? 'chat-start' : 'chat-end'} `}>
             <div className="chat-image avatar">
               <div className="w-10 rounded-full">
                 <img
                   alt={c.sender === 'bot' ? 'Chatbot' : 'User'}
-                  src={
-                    c.sender === 'bot'
-                      ? 'https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'
-                      : 'https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'
-                  }
+                  src={c.sender === 'bot' ? 'images/logo.png' : 'images/logo.png'}
                 />
               </div>
             </div>
@@ -126,7 +122,7 @@ export default function ChatContent() {
             }
           }}
         />
-        <button className="btn btn-success w-28 text-white " onClick={handleSend}>
+        <button className="btn bg-mainColor w-28 text-white " onClick={handleSend}>
           전송
         </button>
       </div>

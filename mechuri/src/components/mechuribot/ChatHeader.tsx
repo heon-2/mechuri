@@ -1,9 +1,9 @@
 import React from 'react';
 export default function ChatHeader() {
   return (
-    <div className="mt-10 w-2/5 h-24 bg-[#258fff] shadow-md rounded-t-2xl flex items-center">
+    <div className="mt-10 w-2/5 h-24 bg-mainColor shadow-md rounded-t-2xl flex items-center">
       <img
-        src="/images/떡볶이.jpg"
+        src="/images/logo.png"
         alt="Chatbot"
         className="ml-5 h-16 flex items-center rounded-full aspect-square object-cover"
       />
