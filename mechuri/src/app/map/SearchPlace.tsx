@@ -136,13 +136,27 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
     // 새로운 마커와 인포윈도우를 설정합니다.
     const selectedPlaceMarker = markers.find((m) => m.getTitle() === place.place_name);
     if (selectedPlaceMarker) {
-      if (!infoWindow) {
-        const newInfoWindow = new window.kakao.maps.InfoWindow({
-          content: `<div style="padding:5px;font-size:12px;">${place.place_name}</div>`,
-        });
-        setInfoWindow(newInfoWindow);
-      }
-      window.kakao.maps.event.trigger(selectedPlaceMarker, 'click');
+      selectedPlaceMarker.setImage(
+        new window.kakao.maps.MarkerImage(
+          'https://velog.velcdn.com/images/cjjss11/post/4f2f52d8-e6b8-4d14-a8d6-4ea2b0a73f67/image.png',
+          new window.kakao.maps.Size(60, 63),
+        ),
+      );
+
+      const infoWindowContent = `
+      <div style="padding:10px; white-space:nowrap;">
+        <div style="font-size:16px; font-weight:bold;">${place.place_name}</div>
+        <div style="font-size:12px; margin-top:4px;">${place.road_address_name || place.address_name}</div>
+      </div>
+    `;
+
+      const newInfoWindow = new window.kakao.maps.InfoWindow({
+        content: infoWindowContent,
+      });
+      newInfoWindow.open(map, selectedPlaceMarker);
+
+      setSelectedMarker(selectedPlaceMarker);
+      setInfoWindow(newInfoWindow);
     }
   };
 
@@ -166,28 +180,28 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
         title: place.place_name,
       });
 
-      window.kakao.maps.event.addListener(marker, 'click', () => {
-        if (selectedMarker) {
-          selectedMarker.setImage(markerImage);
-        }
+      // window.kakao.maps.event.addListener(marker, 'click', () => {
+      //   if (selectedMarker) {
+      //     selectedMarker.setImage(markerImage);
+      //   }
 
-        marker.setImage(
-          new window.kakao.maps.MarkerImage(imageSrc, new window.kakao.maps.Size(60, 63)),
-        );
+      //   marker.setImage(
+      //     new window.kakao.maps.MarkerImage(imageSrc, new window.kakao.maps.Size(60, 63)),
+      //   );
 
-        const content = `<div style="padding:5px;font-size:12px;">${place.place_name}</div>`;
-        if (!infoWindow) {
-          const newInfoWindow = new window.kakao.maps.InfoWindow({
-            content: content,
-          });
-          setInfoWindow(newInfoWindow);
-          newInfoWindow.open(map, marker);
-        } else {
-          infoWindow.setContent(content);
-          infoWindow.open(map, marker);
-        }
-        setSelectedMarker(marker);
-      });
+      //   const content = `<div style="padding:5px;font-size:12px;">${place.place_name}</div>`;
+      //   if (!infoWindow) {
+      //     const newInfoWindow = new window.kakao.maps.InfoWindow({
+      //       content: content,
+      //     });
+      //     setInfoWindow(newInfoWindow);
+      //     newInfoWindow.open(map, marker);
+      //   } else {
+      //     infoWindow.setContent(content);
+      //     infoWindow.open(map, marker);
+      //   }
+      //   setSelectedMarker(marker);
+      // });
 
       return marker;
     });
