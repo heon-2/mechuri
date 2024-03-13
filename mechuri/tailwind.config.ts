@@ -21,6 +21,7 @@ const config = {
       colors: {
         mainColor: '#FF5A5F',
         buttonColor: '#FF5A5F',
+        backGroundColor: '#F6F6F6',
         subColor: '#258fff',
         textColor: '#000000',
         border: 'hsl(var(--border))',
@@ -69,8 +70,9 @@ const config = {
       },
       boxShadow: {
         custom1: '20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff', // 뉴모피즘,
-        custom2: 'inset 20px 20px 60px #d9d9d9, inset -20px -20px 60px #ffffff', // 사용자 정의 boxShadow
+        custom2: 'inset 20px 20px 60px #f6f6f6, inset -20px -20px 60px #ffffff', // 사용자 정의 boxShadow
         custom3: '20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff',
+        custom4: '20px 20px 40px #969696, -20px -20px 40px #ffffff',
       },
       keyframes: {
         'accordion-down': {
