@@ -28,8 +28,6 @@ export default function FoodTest() {
   const [answers, setAnswers] = useState<
     Array<{ step: number; shortQuestion: string; shortAnswer: string }>
   >([]);
-  // const [questionnaire, setQuestionnaire] = useState<Questionnaire[]>([]);
-
   const sendAnswers = async () => {
     const response = await fetch('/api/foodchoice', {
       method: 'POST',
@@ -45,24 +43,6 @@ export default function FoodTest() {
     }
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch('/api/foodchoice');
-  //       if (!response.ok) {
-  //         throw new Error('Data could not be fetched!');
-  //       }
-  //       const data: Questionnaire[] = await response.json(); // 응답을 FoodChoice[] 타입으로 가정
-  //       setQuestionnaire(data); // 응답 데이터를 상태에 저장
-  //       console.log(data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-
-  // React-Query Test Code
   const getQuestionnaire = async () => {
     const response = await fetch('/api/foodchoice');
     if (!response.ok) {
