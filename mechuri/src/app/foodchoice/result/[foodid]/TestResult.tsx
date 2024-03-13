@@ -41,7 +41,7 @@ export default function TestResult({ foodId }: ResultPageProps) {
   });
 
   return (
-    <div className="h-[calc(100vh-4rem)] bg-[#FEECE2]">
+    <div className="h-[calc(100vh-4rem)]">
       {isSuccess ? (
         <>{resultData && <FoodChoiceResult resultData={resultData} />}</>
       ) : (

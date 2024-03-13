@@ -83,7 +83,7 @@ export default function FoodTest() {
   const currentQuestion = questionnaire?.[step - 1];
   return (
     // calc을 사용한 높이 조절 -> 3rem은 NavBar의 높이
-    <div className="grid grid-rows-5 w-screen h-[calc(100%-4rem)] bg-[#f6f6f6]">
+    <div className="grid grid-rows-5 w-screen h-[calc(100%-4rem)]">
       {isLoading ? (
         <LoadingUi />
       ) : (
@@ -104,7 +104,8 @@ export default function FoodTest() {
                 <div
                   key={idx}
                   // 추후에 그림자를 뉴모피즘으로 변환예정.
-                  className="flex  justify-center items-center cursor-pointer   hover:scale-105 transition-all duration-300 ease-in-out bg-white rounded-2xl shadow-2xl"
+                  className="flex  justify-center items-center cursor-pointer   hover:scale-105 transition-all duration-300 ease-in-out bg-backGroundColor rounded-2xl shadow-2xl"
+                  // className="flex  justify-center items-center cursor-pointer   hover:scale-105 transition-all duration-300 ease-in-out bg-transparent rounded-2xl shadow-custom4 "
                   style={{ flexBasis: `${80 / currentQuestion?.Answers?.length}%` }}
                   onClick={() => handleClick(answer.answerId)}
                 >
