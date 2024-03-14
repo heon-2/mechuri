@@ -23,17 +23,17 @@ export default function FoodChoiceResult({ resultData }: FoodChoiceResultProps) 
     <div className="flex justify-center items-center h-full w-screen">
       <div className="card w-1/4 h-5/6 glass ">
         <figure className="h-1/2">
-          <img src={resultData?.imageUrl} alt="food image" />
+          <img src={resultData?.imageUrl} alt="food image" className="h-full" />
         </figure>
         <div className="card-body flex justify-evenly">
           <div className="flex flex-col justify-center text-center gap-4">
             <div className="text-2xl text-gray-800">메뉴 추천 테스트의 결과는?!</div>
-            <div className="text-3xl font-bold text-[#FF856B]">{resultData && resultData.name}</div>
+            <div className="text-3xl font-bold text-mainColor">{resultData && resultData.name}</div>
             <div className="text-xl text-gray-800">
               오늘의 메뉴는 {resultData && resultData.name} 어때요?
             </div>
           </div>
-          <div className="card-actions justify-center flex flex-col items-center">
+          <div className="card-actions justify-center flex flex-col items-center ">
             {/* <div>
               {resultData && (
                 <a
@@ -48,15 +48,17 @@ export default function FoodChoiceResult({ resultData }: FoodChoiceResultProps) 
             </div> */}
             <div>
               <Link href="/main" passHref>
-                <button className="btn bg-[#FF856B] text-white">음식점 찾기</button>
+                <button className="btn bg-mainColor text-white">
+                  {resultData && resultData.name} 음식점 찾기
+                </button>
               </Link>
             </div>
-            <div className="flex flex-row justify-center">
+            <div className="flex flex-row justify-center gap-0">
               <Link href="/main" passHref>
-                <button className="btn bg-[#FF856B] text-white">홈으로 이동</button>
+                <button className="btn bg-mainColor text-white">홈으로 이동</button>
               </Link>
               <Link href="/foodchoice" passHref>
-                <button className="btn bg-[#FF856B] text-white">다시하기</button>
+                <button className="btn bg-mainColor text-white">다시하기</button>
               </Link>
             </div>
           </div>
