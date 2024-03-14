@@ -15,8 +15,33 @@ export default function Select() {
   console.log(category);
 
   return (
-    <div className="bg-gray-300 w-64 h-96 grid grid-rows-3 grid-cols-2 justify-center items-center rounded-3xl">
-      <div
+    <div className="bg-white w-1/2 h-full grid grid-rows-3 grid-cols-2 divide-x divide-y border-2 border-[#FFDCDC]">
+      {['korean', 'japanese', 'western', 'chinese', 'snack', 'dessert'].map((food, idx) => (
+        <div
+          key={food}
+          className={`flex flex-col justify-center items-center cursor-pointer ${
+            category === food ? 'bg-[#FFDCDC]' : 'hover:bg-[#FFDCDC]'
+          }`}
+          onClick={() => selectCategory(food)}
+        >
+          <Image src={`/images/${food}.png`} alt={`${food} food`} width={70} height={70}></Image>
+          <p className="mt-2">
+            {food === 'korean'
+              ? '한식'
+              : food === 'japanese'
+                ? '일식'
+                : food === 'western'
+                  ? '양식'
+                  : food === 'chinese'
+                    ? '중식'
+                    : food === 'snack'
+                      ? '분식'
+                      : '디저트'}
+          </p>
+        </div>
+      ))}
+
+      {/* <div
         className="flex flex-col justify-center items-center cursor-pointer"
         onClick={() => selectCategory('korean')}
       >
@@ -57,7 +82,7 @@ export default function Select() {
       >
         <Image src="/images/desert.png" alt="korean food" width={60} height={60}></Image>
         <p>디저트</p>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -8,7 +8,7 @@ export default function RoulettePage() {
     <div className="h-screen">
       <NavBar></NavBar>
       <div className="grid grid-cols-3 items-center justify-center h-[calc(100vh-4rem)] bg-[#f6f6f6]">
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center h-3/4">
           <Select></Select>
         </div>
         <div className="col-span-2">
