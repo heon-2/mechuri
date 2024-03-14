@@ -27,7 +27,7 @@ export default function Roulette() {
   const [rouletteSize, setRouletteSize] = useState<number>(10); // 룰렛 칸 개수 초기값 설정
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectCategory, setSelectCategory] = useRecoilState(categoryState);
-  const colors = ['#F97B22', '#FEE8B0'];
+  const colors = ['#FF8989', '#FFC7C7', '#FCAEAE', '#FFE2E2', '#FFB4B4'];
 
   useEffect(() => {
     fetchData();
@@ -92,8 +92,8 @@ export default function Roulette() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = 470;
-    canvas.height = 470;
+    canvas.width = 490;
+    canvas.height = 490;
     const [cw, ch] = [canvas.width / 2, canvas.height / 2];
     const radius = cw - 10; // 룰렛의 반지름
     const arc = (2 * Math.PI) / rouletteData.length;
