@@ -5,6 +5,7 @@ import Search from './Search';
 import SearchPlace from './SearchPlace';
 import { useSetRecoilState } from 'recoil';
 import { currentLatState, currentLngState } from '@/stores/atoms/mapState';
+import Image from 'next/image';
 
 declare global {
   interface Window {
@@ -47,7 +48,7 @@ export default function Map() {
           setCurrentLng(position.coords.longitude);
 
           const imageSrc =
-            'https://velog.velcdn.com/images/cjjss11/post/21397cb6-1934-4c7a-aea9-d5c8ddfea157/image.png';
+            'https://velog.velcdn.com/images/cjjss11/post/ade41643-e7d0-4914-be5a-ac64d0d7f151/image.png';
           const imageSize = new window.kakao.maps.Size(64, 69);
           const imageOption = { offset: new window.kakao.maps.Point(27, 69) };
           const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
@@ -127,20 +128,18 @@ export default function Map() {
   };
 
   return (
-    <div>
-      <div className="grid grid-cols-2 gap-2">
+    <div className="relative w-screen h-[calc(100vh-4rem)]">
+      <div id="map" className="w-full h-full overflow-hidden"></div>
+      <div className="bg-[#fff] w-1/3 h-full overflow-y-auto flex-grow absolute top-0 left-0 z-10">
         <SearchPlace map={map}></SearchPlace>
-        <div>
-          <Search onSearch={searchAddress}></Search>
-          <div
-            id="map"
-            className="mt-2"
-            style={{ width: '500px', height: '400px', overflow: 'hidden' }}
-          ></div>
-          <button onClick={setCurrentLocation} className="mt-2 p-2 bg-blue-500 text-white">
-            현재위치
-          </button>
-        </div>
+      </div>
+      <div className="absolute top-3 right-20 z-10">
+        <Search onSearch={searchAddress}></Search>
+      </div>
+      <div className="absolute top-3 right-6 z-30 ">
+        <button onClick={setCurrentLocation} className="p-2 bg-white rounded-md">
+          <Image src="/images/current.png" alt="currentLocation" width={30} height={30}></Image>
+        </button>
       </div>
     </div>
   );
