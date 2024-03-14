@@ -67,6 +67,14 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
       }
       const jsonResponse = await response.json();
       const data: PlaceProps[] = jsonResponse.documents;
+
+      if (data.length === 0) {
+        alert(`${keyword} 검색 결과가 없습니다.`);
+        setPlaces([]);
+        setTotalPage(0);
+        return;
+      }
+
       setPlaces(data);
       console.log(jsonResponse);
       console.log(data);
