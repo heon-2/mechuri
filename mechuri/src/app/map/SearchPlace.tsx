@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 // declare global {
 //   interface Window {
@@ -45,6 +46,7 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
   const search = searchParams.get('search');
   const [selectedMarker, setSelectedMarker] = useState<any>(null);
   const [infoWindow, setInfoWindow] = useState<any>(null);
+  const [isSearch, setIsSearch] = useState<boolean>(false);
 
   useEffect(() => {
     if (search && currentLat && currentLng) {
@@ -65,15 +67,9 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
       if (!response.ok) {
         throw new Error('Data could not be fetched');
       }
+      setIsSearch(true);
       const jsonResponse = await response.json();
       const data: PlaceProps[] = jsonResponse.documents;
-
-      if (data.length === 0) {
-        alert(`${keyword} 검색 결과가 없습니다.`);
-        setPlaces([]);
-        setTotalPage(0);
-        return;
-      }
 
       setPlaces(data);
       console.log(jsonResponse);
@@ -371,35 +367,54 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
         </label>
       </div>
 
-      <div className="flex-grow overflow-auto">
-        <table className="table w-full">
-          {/* head */}
-          <tbody>
-            {places.map((place, index) => (
-              <tr
-                key={index}
-                className="align-top hover:bg-gray-200"
-                onClick={() => handlePlaceClick(place)}
-              >
-                {/* <Link href={place.place_url}> */}
-                <td className="py-3">
-                  <div className="flex items-center gap-3 mb-1">
-                    <div className="text-2xl text-mainColor">{place.place_name}</div>
-                    <div className="text-md mt-1">{place.category_name.split('>').pop()}</div>
-                  </div>
-                  <div className="flex gap-1">
-                    <div>{place.road_address_name}</div>
-                    <div className="font-bold">({place.distance}m)</div>
-                  </div>
-                  <div>(지번){place.address_name}</div>
-                  <div>{place.phone}</div>
-                </td>
-                {/* </Link> */}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {places.length === 0 ? (
+        <div className="flex justify-center items-center flex-grow">
+          {isSearch ? (
+            <div className="flex flex-col items-center">
+              <Image src="/images/question4.png" alt="question" width={130} height={130}></Image>
+              <p className="text-xl font-bold mt-10 text-mainColor">{keywordInput} </p>
+              <p className="text-xl mb-5">검색 결과가 없습니다.</p>
+              <span>검색어가 정확한지 다시 한번 확인해 주세요</span>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center">
+              <Image src="/images/search22.png" alt="search" width={130} height={130}></Image>
+              <p className="mt-6 text-xl">키워드를 검색해 주세요!</p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="flex-grow overflow-auto">
+          <table className="table w-full">
+            {/* head */}
+            <tbody>
+              {places.map((place, index) => (
+                <tr
+                  key={index}
+                  className="align-top hover:bg-gray-200"
+                  onClick={() => handlePlaceClick(place)}
+                >
+                  {/* <Link href={place.place_url}> */}
+                  <td className="py-3">
+                    <div className="flex items-center gap-3 mb-1">
+                      <div className="text-2xl text-mainColor">{place.place_name}</div>
+                      <div className="text-md mt-1">{place.category_name.split('>').pop()}</div>
+                    </div>
+                    <div className="flex gap-1">
+                      <div>{place.road_address_name}</div>
+                      <div className="font-bold">({place.distance}m)</div>
+                    </div>
+                    <div>(지번){place.address_name}</div>
+                    <div>{place.phone}</div>
+                  </td>
+                  {/* </Link> */}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
       <div className="join mt-5 mb-4 flex justify-center sticky bottom-0 z-10">
         {Array.from({ length: totalPage }, (_, i) => (
           <button
