@@ -1,11 +1,11 @@
 import React from 'react';
 export default function NavBar() {
   const components: { title: string; href: string; description: string }[] = [
-    {
-      title: '홈',
-      href: '/main',
-      description: '메인 페이지입니다.',
-    },
+    // {
+    //   title: '홈',
+    //   href: '/main',
+    //   description: '메인 페이지입니다.',
+    // },
     {
       title: '룰렛 돌리기',
       href: '/roulette',
@@ -35,7 +35,7 @@ export default function NavBar() {
       <div className="flex items-center h-full justify-between mx-20">
         <div className="flex gap-2">
           <span>
-            <img src="/images/logo.png" alt="logo" className="h-16" />
+            <img src="/images/logo1.png" alt="logo" className="h-16" />
           </span>
           <span className="self-center text-3xl font-semibold whitespace-nowrap text-[#FF5A5F]">
             Mechuri

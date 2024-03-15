@@ -10,7 +10,7 @@ export default function ChatContent() {
       message: '안녕하세요👋 여러분의 메뉴 고민을 해소시켜 줄 저는 메추리봇이에요.',
       sender: 'bot',
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    }, // 예시 시간, 실제 구현에서는 동적으로 설정
+    },
     {
       message: '오늘 여러분의 기분을 적어주시면, 그에 맞는 메뉴를 추천해드릴게요 !',
       sender: 'bot',
@@ -97,7 +97,7 @@ export default function ChatContent() {
               <div className="w-10 rounded-full">
                 <img
                   alt={c.sender === 'bot' ? 'Chatbot' : 'User'}
-                  src={c.sender === 'bot' ? 'images/logo.png' : 'images/logo.png'}
+                  src={c.sender === 'bot' ? 'images/logo1.png' : 'images/logo1.png'}
                 />
               </div>
             </div>
