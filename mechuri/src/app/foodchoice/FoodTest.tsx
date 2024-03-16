@@ -103,9 +103,7 @@ export default function FoodTest() {
               {currentQuestion?.Answers?.map((answer, idx) => (
                 <div
                   key={idx}
-                  // 추후에 그림자를 뉴모피즘으로 변환예정.
                   className="flex  justify-center items-center cursor-pointer   hover:scale-105 transition-all duration-300 ease-in-out bg-backGroundColor rounded-2xl shadow-2xl"
-                  // className="flex  justify-center items-center cursor-pointer   hover:scale-105 transition-all duration-300 ease-in-out bg-transparent rounded-2xl shadow-custom4 "
                   style={{ flexBasis: `${80 / currentQuestion?.Answers?.length}%` }}
                   onClick={() => handleClick(answer.answerId)}
                 >
