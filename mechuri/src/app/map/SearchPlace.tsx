@@ -1,9 +1,15 @@
 'use client';
 
-import { currentLatState, currentLngState } from '@/stores/atoms/mapState';
+import {
+  currentLatState,
+  currentLngState,
+  keywordInputState,
+  placeState,
+  currentPageState,
+} from '@/stores/atoms/mapState';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -18,7 +24,7 @@ interface PlaceSearchProps {
   map: any;
 }
 
-interface PlaceProps {
+export interface PlaceProps {
   address_name: string;
   category_group_code: string;
   category_group_name: string;
@@ -34,10 +40,10 @@ interface PlaceProps {
 }
 
 export default function SearchPlace({ map }: PlaceSearchProps) {
-  const [keywordInput, setKeywordInput] = useState<string>('');
-  const [places, setPlaces] = useState<PlaceProps[]>([]);
+  const [keywordInput, setKeywordInput] = useRecoilState(keywordInputState);
+  const [places, setPlaces] = useRecoilState(placeState);
   const pageSize = 10;
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useRecoilState(currentPageState);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [markers, setMakrers] = useState<any[]>([]);
   const currentLat = useRecoilValue(currentLatState);
@@ -371,14 +377,14 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
         <div className="flex justify-center items-center flex-grow">
           {isSearch ? (
             <div className="flex flex-col items-center">
-              <Image src="/images/question4.png" alt="question" width={130} height={130}></Image>
-              <p className="text-xl font-bold mt-10 text-mainColor">{keywordInput} </p>
-              <p className="text-xl mb-5">검색 결과가 없습니다.</p>
+              <Image src="/images/question.png" alt="question" width={130} height={130}></Image>
+              {/* <p className="text-xl font-bold mt-10 text-mainColor">{keywordInput} </p> */}
+              <p className="text-xl mt-12 mb-1">검색 결과가 없습니다.</p>
               <span>검색어가 정확한지 다시 한번 확인해 주세요</span>
             </div>
           ) : (
             <div className="flex flex-col items-center">
-              <Image src="/images/search22.png" alt="search" width={130} height={130}></Image>
+              <Image src="/images/search.png" alt="search" width={130} height={130}></Image>
               <p className="mt-6 text-xl">키워드를 검색해 주세요!</p>
             </div>
           )}
