@@ -2,7 +2,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import OpenAI from 'openai';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 export default function ChatContent() {
   const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_APIKEY as String;
   // 초기 데이터
@@ -61,6 +61,37 @@ export default function ChatContent() {
     return response.json();
   }
 
+  const { mutate, isPending, isError } = useMutation({
+    mutationFn: handleSend,
+    onSuccess(data) {
+      const botReply = data.choices[0].message.content.trim();
+      const parts = botReply.split('/');
+      const recommendedFood = parts[0].trim(); // 추천 음식
+      const reason = parts[1].trim(); // 이유
+      const finalReply = `오늘의 메추리봇 추천 음식은 ${recommendedFood}입니다😊 ${reason}`;
+      // 챗봇의 답변을 채팅에 추가
+      setChat((chat) => [
+        ...chat,
+        {
+          message: finalReply,
+          sender: 'bot',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        },
+      ]);
+    },
+    onError(error) {
+      console.error('Error:', error);
+      // 오류 처리 및 사용자에게 피드백
+      setChat((chat) => [
+        ...chat,
+        {
+          message: '[사용자의 요청이 제대로 전달되지 않았습니다. 추후에 다시 시도해주세요!]',
+          sender: 'bot',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        },
+      ]);
+    },
+  });
   return (
     <div className="flex flex-col h-4/5 w-2/5 ">
       <div className="flex-grow overflow-auto bg-white">
@@ -89,23 +120,25 @@ export default function ChatContent() {
       </div>
       <div className="flex w-full shadow-lg bg-slate-50 rounded-b-xl gap-1">
         <input
-          disabled={true}
-          placeholder="오늘의 기분 상태를 상세하게 적어주세요! (ex. 행복, 슬픔, 짜증 등)"
-          className="input input-bordered w-full "
+          disabled={isPending}
+          placeholder="오늘의 기분을 10자 이상 적어주세요! (ex. 행복, 슬픔, 짜증 등)"
+          className="input input-bordered w-full"
           value={input}
           onChange={handleInput}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleSend();
+            if (e.key === 'Enter' && input.trim().length >= 10) {
+              mutate();
             }
           }}
         />
-        <button className="btn bg-mainColor w-28 text-white " onClick={handleSend}>
-          전송
+        <button
+          className={`btn ${isPending ? 'bg-slate-400' : 'bg-[#05D686]'} w-28 text-white hover:bg-green-500`}
+          onClick={() => mutate()}
+          disabled={isPending || input.trim().length < 10}
+        >
+          {isPending ? '응답중...' : '전송'}
         </button>
       </div>
     </div>
   );
 }
-
-//
