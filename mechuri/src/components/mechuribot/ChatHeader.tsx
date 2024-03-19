@@ -5,7 +5,7 @@ export default function ChatHeader() {
       <img
         src="/images/logo1.png"
         alt="Chatbot"
-        className="ml-5 h-16 flex items-center rounded-full aspect-square object-cover"
+        className="ml-3 h-20 flex items-center rounded-full aspect-square object-cover"
       />
       <div className="ml-4">
         <p className="text-white font-semibold">메추리봇</p>
