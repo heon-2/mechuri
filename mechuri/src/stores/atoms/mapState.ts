@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { PlaceProps } from '@/app/map/SearchPlace';
+import { PlaceProps } from '@/components/map/SearchPlace';
 
 export const currentLatState = atom<number>({
   key: 'currentLatState',
