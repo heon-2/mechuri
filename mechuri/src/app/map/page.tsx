@@ -1,4 +1,4 @@
-import Map from './Map';
+import Map from '../../components/map/Map';
 import NavBar from '@/components/commons/NavBar';
 
 export default function MapPage() {

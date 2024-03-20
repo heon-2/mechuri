@@ -18,6 +18,7 @@ export default function Map() {
   const [marker, setMarker] = useState<any>(null);
   const setCurrentLat = useSetRecoilState(currentLatState);
   const setCurrentLng = useSetRecoilState(currentLngState);
+  const [isSearchFolder, setIsSearchFolder] = useState<boolean>(true);
 
   useEffect(() => {
     const mapScript = document.createElement('script');
@@ -127,17 +128,37 @@ export default function Map() {
     });
   };
 
+  const toggleSearchPlace = () => {
+    setIsSearchFolder(!isSearchFolder);
+  };
+
   return (
     <div className="relative w-screen h-[calc(100vh-4rem)]">
       <div id="map" className="w-full h-full overflow-hidden"></div>
-      <div className="bg-[#fff] w-1/3 h-full overflow-y-auto flex-grow absolute top-0 left-0 z-10">
-        <SearchPlace map={map}></SearchPlace>
-      </div>
-      <div className="absolute top-3 right-20 z-10">
+      {/* <button onClick={toggleSearchPlace} className="absolute z-20 top-1/2 left-1/3 h-16 bg-white"> */}
+      {isSearchFolder ? (
+        <button
+          onClick={toggleSearchPlace}
+          className="absolute z-10 top-1/2 left-1/3 h-16 bg-white"
+        >
+          <Image src="/images/left.png" alt="접기" width={40} height={40}></Image>
+        </button>
+      ) : (
+        <button onClick={toggleSearchPlace} className="absolute z-10 top-1/2 left-0 h-16 bg-white">
+          <Image src="/images/right.png" alt="펼치기" width={40} height={40}></Image>
+        </button>
+      )}
+      {/* </button> */}
+      {isSearchFolder && (
+        <div className="bg-[#fff] w-1/3 h-full overflow-y-auto flex-grow absolute top-0 left-0 z-10">
+          <SearchPlace map={map}></SearchPlace>
+        </div>
+      )}
+      {/* <div className="absolute top-3 right-20 z-10">
         <Search onSearch={searchAddress}></Search>
-      </div>
-      <div className="absolute top-3 right-6 z-30 ">
-        <button onClick={setCurrentLocation} className="p-2 bg-white rounded-md">
+      </div> */}
+      <div className="absolute bottom-3 right-6 z-30 ">
+        <button onClick={setCurrentLocation} className="p-2 bg-white rounded-md shadow-lg">
           <Image src="/images/current.png" alt="currentLocation" width={30} height={30}></Image>
         </button>
       </div>

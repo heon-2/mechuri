@@ -1,7 +1,7 @@
 import React from 'react';
-import Select from './Select';
+import Select from '../../components/roulette/Select';
 import NavBar from '@/components/commons/NavBar';
-import Roulette from './Roulette';
+import Roulette from '../../components/roulette/Roulette';
 
 export default function RoulettePage() {
   return (
