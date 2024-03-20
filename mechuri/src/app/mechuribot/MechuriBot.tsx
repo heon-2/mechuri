@@ -4,7 +4,7 @@ import ChatContent from '@/components/mechuribot/ChatContent';
 import ChatHeader from '@/components/mechuribot/ChatHeader';
 export default function MechuriBot() {
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] items-center mx-auto bg-[#f6f6f6]">
+    <div className="flex flex-col h-[calc(100vh-4rem)] items-center mx-auto bg-backGroundColor">
       <ChatHeader />
       <ChatContent />
     </div>
