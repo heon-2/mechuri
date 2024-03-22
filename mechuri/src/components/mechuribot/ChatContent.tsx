@@ -121,7 +121,7 @@ export default function ChatContent() {
         <input
           disabled={isPending}
           placeholder="오늘의 기분을 10자 이상 적어주세요! (ex. 행복, 슬픔, 짜증 등)"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full h-12"
           value={input}
           onChange={handleInput}
           onKeyDown={(e) => {
@@ -131,7 +131,7 @@ export default function ChatContent() {
           }}
         />
         <button
-          className={`btn ${isPending ? 'bg-slate-400' : 'bg-[#05D686]'} w-28 text-white hover:bg-green-500`}
+          className={`btn ${isPending ? 'bg-slate-400' : 'bg-[#05D686]'} w-28 h-12 text-white hover:bg-green-500`}
           onClick={() => mutate()}
           disabled={isPending || input.trim().length < 10}
         >
