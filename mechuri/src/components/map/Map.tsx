@@ -149,11 +149,18 @@ export default function Map() {
         </button>
       )}
       {/* </button> */}
-      {isSearchFolder && (
-        <div className="bg-[#fff] w-1/3 h-full overflow-y-auto flex-grow absolute top-0 left-0 z-10">
+      {/* {isSearchFolder && (
+        <div className="bg-[#fff] w-1/3 h-full overflow-y-auto flex-grow absolute top-0 left-0 z-10 ">
           <SearchPlace map={map}></SearchPlace>
         </div>
-      )}
+      )} */}
+
+      <div
+        className={`bg-[#fff] w-1/3 h-full overflow-y-auto flex-grow absolute top-0 left-0 z-10 ${isSearchFolder ? '' : 'hidden'}`}
+      >
+        <SearchPlace map={map}></SearchPlace>
+      </div>
+
       {/* <div className="absolute top-3 right-20 z-10">
         <Search onSearch={searchAddress}></Search>
       </div> */}
