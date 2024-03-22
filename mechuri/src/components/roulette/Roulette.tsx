@@ -28,6 +28,7 @@ export default function Roulette() {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectCategory, setSelectCategory] = useRecoilState(categoryState);
   const colors = ['#FF8989', '#FFC7C7', '#FCAEAE', '#FFE2E2', '#FFB4B4'];
+  const [canvasSize, setCanvasSize] = useState<any>({ width: 500, height: 500 });
 
   useEffect(() => {
     fetchData();
@@ -81,6 +82,20 @@ export default function Roulette() {
   };
 
   useEffect(() => {
+    canvasResize();
+    window.addEventListener('resize', canvasResize);
+
+    return () => window.removeEventListener('resize', canvasResize);
+  }, []);
+
+  const canvasResize = () => {
+    const { innerWidth, innerHeight } = window;
+
+    const size = Math.min(innerWidth, innerHeight) * 0.63;
+    setCanvasSize({ width: size, height: size });
+  };
+
+  useEffect(() => {
     if (rouletteData.length > 0) {
       drawRoulette();
     }
@@ -92,13 +107,16 @@ export default function Roulette() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = 490;
-    canvas.height = 490;
+    canvas.width = canvasSize.width;
+    canvas.height = canvasSize.height;
     const [cw, ch] = [canvas.width / 2, canvas.height / 2];
     const radius = cw - 10; // 룰렛의 반지름
     const arc = (2 * Math.PI) / rouletteData.length;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const fontSize = canvasSize.width / 28;
+    ctx.font = `${fontSize}px Arial`;
 
     rouletteData.forEach((item, i) => {
       ctx.beginPath();
@@ -111,7 +129,7 @@ export default function Roulette() {
       // Text
       ctx.save();
       ctx.fillStyle = '#fefefe';
-      ctx.font = '18px Arial';
+      // ctx.font = '18px Arial';
       ctx.translate(
         cw + (Math.cos(arc * i + arc / 2) * radius) / 1.5,
         ch + (Math.sin(arc * i + arc / 2) * radius) / 1.5,
@@ -124,7 +142,7 @@ export default function Roulette() {
       ctx.beginPath();
       ctx.moveTo(cw, ch);
       ctx.arc(cw, ch, radius, arc * i, arc * (i + 1), false);
-      ctx.lineWidth = 4; // 선의 두께를 지정합니다.
+      ctx.lineWidth = 3; // 선의 두께를 지정합니다.
       ctx.strokeStyle = 'black'; // 선의 색상을 지정합니다.
       ctx.stroke();
     }
@@ -190,11 +208,11 @@ export default function Roulette() {
     <div className="flex justify-between items-center">
       {/* 룰렛과 버튼들 그리드 짜기 */}
       <div className="flex flex-col items-center justify-center roulette-container relative">
-        <canvas className="relative z-10 h-full w-full" ref={canvasRef} />
+        <canvas className="relative z-10" ref={canvasRef} />
         <div className="absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <button
             onClick={rotate}
-            className="bg-[#FF856B] text-white text-xl w-20 h-20 rounded-full "
+            className="bg-[#FF856B] text-white text-xl w-16 h-16 rounded-full "
           >
             SPIN
           </button>
