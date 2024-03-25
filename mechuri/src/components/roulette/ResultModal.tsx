@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FoodData } from '@/app/roulette/Roulette';
+import { FoodData } from '@/components/roulette/Roulette';
 import { useRouter } from 'next/navigation';
 import {
   AlertDialog,
