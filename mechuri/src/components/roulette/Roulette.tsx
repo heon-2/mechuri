@@ -19,8 +19,12 @@ export interface FoodData {
   category: string;
 }
 
-export default function Roulette() {
-  const [data, setData] = useState<FoodData[]>([]);
+interface RouletteProps {
+  data: FoodData[] | undefined;
+}
+
+export default function Roulette({ data }: RouletteProps) {
+  // const [data, setData] = useState<FoodData[]>([]);
   const [rouletteData, setRouletteData] = useState<FoodData[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [selectedItem, setSelectedItem] = useState<FoodData | null>(null);
@@ -30,31 +34,38 @@ export default function Roulette() {
   const colors = ['#FF8989', '#FFC7C7', '#FCAEAE', '#FFE2E2', '#FFB4B4'];
   const [canvasSize, setCanvasSize] = useState<any>({ width: 500, height: 500 });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch('/api/roulette');
-      if (!response.ok) {
-        throw new Error('Data could not be fetched');
-      }
-      const fetchData: FoodData[] = await response.json();
-      setData(fetchData);
-      console.log(fetchData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const fetchData = async () => {
+  //   // try {
+  //   const response = await fetch('/api/roulette');
+  //   if (!response.ok) {
+  //     throw new Error('에러가 발생했습니다.');
+  //   }
+  //   return await response.json();
+  //   // const fetchData: FoodData[] = await response.json();
+  //   // setData(fetchData);
+  //   // console.log(fetchData);
+  //   // } catch (error) {
+  //   // console.error(error);
+  //   // }
+  // };
+  // const { data: data, isLoading } = useQuery<FoodData[]>({
+  //   queryKey: ['roulette'],
+  //   queryFn: fetchData,
+  // });
 
   useEffect(() => {
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       randomDataRoulette();
     }
   }, [data, rouletteSize, selectCategory]);
 
   const randomDataRoulette = () => {
+    if (!data) return;
+
     let filteredData = data;
 
     if (selectCategory) {
@@ -206,13 +217,17 @@ export default function Roulette() {
 
   return (
     <div className="flex justify-between items-center">
+      {/* {isLoading ? (
+        <LoadingUi></LoadingUi>
+      ) : (
+        <> */}
       {/* 룰렛과 버튼들 그리드 짜기 */}
       <div className="flex flex-col items-center justify-center roulette-container relative">
         <canvas className="relative z-10" ref={canvasRef} />
         <div className="absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <button
             onClick={rotate}
-            className="bg-[#FF856B] text-white text-xl w-16 h-16 rounded-full "
+            className="bg-[#FF856B] text-white text-xl w-20 h-20 rounded-full "
           >
             SPIN
           </button>
@@ -265,6 +280,8 @@ export default function Roulette() {
         onClose={() => setModalOpen(false)}
         open={modalOpen}
       ></ResultModal>
+      {/* </>
+      )} */}
     </div>
   );
 }
