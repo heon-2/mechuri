@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
+import Image from 'next/image';
 interface FoodChoiceResultProps {
   resultData: ResultFoodData | null;
 }
@@ -23,7 +24,9 @@ export default function FoodChoiceResult({ resultData }: FoodChoiceResultProps) 
     <div className="flex justify-center items-center h-full w-screen">
       <div className="card w-1/4 h-5/6 glass ">
         <figure className="h-1/2">
-          <img src={resultData?.imageUrl} alt="food image" className="h-full" />
+          <div className="relative h-full aspect-[4/3]">
+            <Image src={resultData?.imageUrl!!} alt="Description" fill objectFit="cover" />
+          </div>
         </figure>
         <div className="card-body flex justify-evenly">
           <div className="flex flex-col justify-center text-center gap-4">
