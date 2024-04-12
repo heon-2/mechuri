@@ -45,13 +45,10 @@ export default function ChatContent() {
       max_tokens: 150,
       top_p: 0.5,
     };
-
-    // OpenAI API 호출
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('/api/chatbot', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
       },
       body: JSON.stringify(reqBody),
     });
