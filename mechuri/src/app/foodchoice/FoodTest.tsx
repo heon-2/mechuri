@@ -17,12 +17,13 @@ interface AnswerDetail {
 }
 
 import React, { useEffect } from 'react';
-import Link from 'next/link';
+import Image from 'next/image';
 import LoadingUi from '@/components/commons/LoadingUi';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import BottomProgressiveBar from '@/components/foodchoice/BottomProgressiveBar';
 import { useQuery } from '@tanstack/react-query';
+
 export default function FoodTest() {
   let [step, setStep] = useState(1);
   const [answers, setAnswers] = useState<
@@ -108,12 +109,13 @@ export default function FoodTest() {
                   onClick={() => handleClick(answer.answerId)}
                 >
                   <div className="h-full w-full flex flex-col items-center justify-center gap-10">
-                    {/* 선택지 내용 */}
                     {answer.image && (
-                      <img
+                      <Image
                         className="rounded-xl h-2/3 aspect-[4/3]"
                         src={answer.image}
-                        alt="Sample Image"
+                        alt="Description"
+                        width={350}
+                        height={200}
                       />
                     )}
                     <div className="font-semibold text-4xl text-gray-800">{answer.longAnswer}</div>
