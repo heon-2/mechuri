@@ -32,7 +32,7 @@ type Answer = {
 };
 type Answers = Answer[];
 // POST 요청 처리
-// POST 요청 처리
+
 export async function POST(request: NextRequest) {
   try {
     const { db } = await connectDB();

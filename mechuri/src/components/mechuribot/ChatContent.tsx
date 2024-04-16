@@ -8,18 +8,18 @@ export default function ChatContent() {
   // 초기 데이터
   const [chat, setChat] = useState([
     {
-      message: '안녕하세요👋 여러분의 메뉴 고민을 해소시켜 줄 저는 메추리봇이에요.',
+      message: '안녕하세요👋 여러분의 메뉴 고민을 해소시켜 줄 메추리봇이에요.',
       sender: 'bot',
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
     {
-      message: '오늘 여러분의 기분을 적어주시면, 그에 맞는 메뉴를 추천해드릴게요 !',
+      message: '오늘의 기분을 10자 이상 적어주시면, 그에 맞는 메뉴를 추천해드릴게요 !',
       sender: 'bot',
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
   const [defaultMessage, setDefaultMessage] = useState(
-    '오늘 내 기분에 맞는 음식메뉴를 한 단어로 추천해줘. 결과는 추천음식/이유 형식으로 알려줘. 이유는 한 줄로 해줘.',
+    '오늘 내 기분에 맞는 음식메뉴를 한 단어로 추천해줘. 결과는 추천음식/이유 형식으로 알려줘. 이유는 한 줄의 정갈한 문장으로 해줘.',
   );
   const [input, setInput] = useState('');
 
@@ -41,16 +41,14 @@ export default function ChatContent() {
         { role: 'user', content: defaultMessage },
         { role: 'system', content: 'You are a Someone who recommends a food menu' },
       ],
-      temperature: 1,
+      temperature: 0.4,
       max_tokens: 150,
+      top_p: 0.5,
     };
-
-    // OpenAI API 호출
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('/api/chatbot', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
       },
       body: JSON.stringify(reqBody),
     });
@@ -79,9 +77,7 @@ export default function ChatContent() {
         },
       ]);
     },
-    onError(error) {
-      console.error('Error:', error);
-      // 오류 처리 및 사용자에게 피드백
+    onError() {
       setChat((chat) => [
         ...chat,
         {
@@ -98,7 +94,7 @@ export default function ChatContent() {
         {chat.map((c, index) => (
           <div
             key={index}
-            className={`chat ${c.sender === 'bot' ? 'chat-start flex-start' : 'chat-end flex-end'} `}
+            className={`chat ${c.sender === 'bot' ? 'chat-start flex-start' : 'chat-end flex-end'}`}
           >
             <div className="chat-image avatar">
               <div className="w-10 rounded-full">
@@ -112,7 +108,7 @@ export default function ChatContent() {
               {c.sender === 'bot' ? '메추리봇' : '사용자'}
               <time className="text-xs opacity-50 ml-1">{c.time}</time>
             </div>
-            <div className={`chat-bubble ${c.sender === 'bot' ? '' : 'bg-mainColor'}`}>
+            <div className={`chat-bubble ${c.sender === 'bot' ? '' : 'bg-mainColor'} max-w-[75%]`}>
               {c.message}
             </div>
           </div>
@@ -122,7 +118,7 @@ export default function ChatContent() {
         <input
           disabled={isPending}
           placeholder="오늘의 기분을 10자 이상 적어주세요! (ex. 행복, 슬픔, 짜증 등)"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full h-12"
           value={input}
           onChange={handleInput}
           onKeyDown={(e) => {
@@ -132,7 +128,7 @@ export default function ChatContent() {
           }}
         />
         <button
-          className={`btn ${isPending ? 'bg-slate-400' : 'bg-[#05D686]'} w-28 text-white hover:bg-green-500`}
+          className={`btn ${isPending ? 'bg-slate-400' : 'bg-[#05D686]'} w-28 h-12 text-white hover:bg-green-500`}
           onClick={() => mutate()}
           disabled={isPending || input.trim().length < 10}
         >
