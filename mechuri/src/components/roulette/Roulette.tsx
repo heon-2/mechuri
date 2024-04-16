@@ -139,7 +139,7 @@ export default function Roulette({ data }: RouletteProps) {
 
       // Text
       ctx.save();
-      ctx.fillStyle = '#fefefe';
+      ctx.fillStyle = '#000';
       // ctx.font = '18px Arial';
       ctx.translate(
         cw + (Math.cos(arc * i + arc / 2) * radius) / 1.5,
@@ -222,7 +222,7 @@ export default function Roulette({ data }: RouletteProps) {
       ) : (
         <> */}
       {/* 룰렛과 버튼들 그리드 짜기 */}
-      <div className="flex flex-col items-center justify-center roulette-container relative">
+      <div className="flex flex-col items-center justify-center roulette-container relative ml-6">
         <canvas className="relative z-10" ref={canvasRef} />
         <div className="absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <button

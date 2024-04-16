@@ -22,7 +22,9 @@ export default function RouletteSubPage() {
   return (
     <div className="grid grid-cols-3 items-center justify-center h-[calc(100vh-4rem)] bg-[#f6f6f6]">
       {isLoading ? (
-        <LoadingUi></LoadingUi>
+        <div className="col-span-3">
+          <LoadingUi></LoadingUi>
+        </div>
       ) : (
         <>
           <div className="flex justify-center items-center h-3/4">
