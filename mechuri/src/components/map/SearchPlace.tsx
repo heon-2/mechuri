@@ -52,6 +52,7 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
   const [isSearch, setIsSearch] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log(search, 'dfads');
     if (search && currentLat && currentLng) {
       setKeywordInput(search);
       handleSearch(search);
@@ -59,14 +60,28 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
   }, [search, currentLat, currentLng]);
 
   const handleSearch = async (keyword: string = keywordInput) => {
-    const url = `https://dapi.kakao.com/v2/local/search/keyword?query=${keyword}&page=${currentPage}&size=${pageSize}&x=${currentLng}&y=${currentLat}&radius=${10000}`;
+    const queryParams = new URLSearchParams({
+      query: keyword,
+      page: currentPage.toString(),
+      size: pageSize.toString(),
+      x: currentLng.toString(),
+      y: currentLat.toString(),
+      radius: '10000',
+    }).toString();
+    const url = `/api/searchplace?${queryParams}`;
+    // const url = `/api/searchplace?query=${keyword}&page=${currentPage}&size=${pageSize}&x=${currentLng}&y=${currentLat}&radius=${10000}`;
+
+    // const url = `https://dapi.kakao.com/v2/local/search/keyword?query=${keyword}&page=${currentPage}&size=${pageSize}&x=${currentLng}&y=${currentLat}&radius=${10000}`;
+
     try {
       const response = await fetch(url, {
         method: 'GET',
-        headers: {
-          Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_RESTAPI_APIKEY}`,
-        },
+
+        // headers: {
+        //   Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_RESTAPI_APIKEY}`,
+        // },
       });
+      console.log(response);
       if (!response.ok) {
         throw new Error('Data could not be fetched');
       }
@@ -114,7 +129,9 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
   };
 
   useEffect(() => {
-    handleSearch();
+    if (places.length > 0) {
+      handleSearch();
+    }
   }, [search, currentPage]);
 
   useEffect(() => {
