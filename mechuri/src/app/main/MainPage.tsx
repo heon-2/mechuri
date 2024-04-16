@@ -17,6 +17,7 @@ export default function MainPage() {
           className="brightness-50 "
           src="/images/mainPage/메인.jpg"
           fill={true}
+          quality={75}
           style={{ objectFit: 'cover' }}
           alt={'메인화면 사진'}
         ></Image>
