@@ -2,16 +2,29 @@
 import React, { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import useScrollVisible from '@/hooks/useScrollVisible';
 export default function MainPage() {
+  const firstSectionRef = useRef<HTMLDivElement>(null);
   const secondSectionRef = useRef<HTMLDivElement>(null);
+  const thirdSectionRef = useRef<HTMLDivElement>(null);
+  const fourthSectionRef = useRef<HTMLDivElement>(null);
+  const fifthSectionRef = useRef<HTMLDivElement>(null);
+
+  const firstVisible = useScrollVisible(firstSectionRef);
+  const secondVisible = useScrollVisible(secondSectionRef);
+  const thirdVisible = useScrollVisible(thirdSectionRef);
+  const fourthVisible = useScrollVisible(fourthSectionRef);
+  const fifthVisible = useScrollVisible(fifthSectionRef);
   const scrollToSecondSection = () => {
-    console.log('Scrolling to second section'); // 디버깅을 위해 로그 추가
     secondSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
   return (
     <div className=" bg-backGroundColor">
       {/* 첫 화면 칸 */}
-      <div className="h-[calc(100vh-4rem)] relative">
+      <div
+        // ref={firstSectionRef}
+        className={`h-[calc(100vh-4rem)] relative`}
+      >
         {/* 이미지 */}
         <Image
           className="brightness-50 "
@@ -36,11 +49,14 @@ export default function MainPage() {
         </div>
       </div>
       {/* 두 번째 칸 */}
-      <div ref={secondSectionRef} className="h-screen">
+      <div
+        ref={secondSectionRef}
+        className={`h-screen opacity-0 ${secondVisible ? 'animate-scroll-fade-in' : ''}`}
+      >
         <div className="flex h-[20vh] w-full justify-center items-center text-center font-bold text-3xl bg-gray-200 leading-relaxed">
-          메뉴 추천 리스트, 메추리에서는 4가지 기능을 제공합니다.
+          메추리에서는 4가지 기능을 제공합니다.
           <br />
-          룰렛, 테스트, 챗봇, 지도 기능을 통해 여러분의 메뉴 고민을 덜어드립니다.
+          룰렛, 테스트, 챗봇을 통해 메뉴를 추천받고, 지도를 통해 음식점을 검색해보세요 !
         </div>
         <div className="grid grid-cols-2 h-[80vh] w-[70vw] mx-auto">
           <div className="relative col-span-1">
@@ -69,7 +85,10 @@ export default function MainPage() {
       </div>
       {/* 세 번째 칸 */}
 
-      <div className="grid grid-cols-2 h-[80vh] w-[70vw] mx-auto">
+      <div
+        ref={thirdSectionRef}
+        className={`grid grid-cols-2 h-[80vh] w-[70vw] mx-auto opacity-0 ${thirdVisible ? 'animate-scroll-fade-in' : ''}`}
+      >
         <div className="col-span-1 flex flex-col mt-64">
           <div className="text-mainColor text-5xl text-left font-bold">메뉴 추천 테스트</div>
           <div className="text-2xl text-left mt-10 leading-relaxed">
@@ -98,7 +117,10 @@ export default function MainPage() {
 
       {/* 네 번째 칸 */}
 
-      <div className="grid grid-cols-2 h-[80vh] w-[70vw] mx-auto">
+      <div
+        ref={fourthSectionRef}
+        className={`grid grid-cols-2 h-[80vh] w-[70vw] mx-auto opacity-0 ${fourthVisible ? 'animate-scroll-fade-in' : ''}`}
+      >
         <div className="relative col-span-1">
           <Image
             src="/images/mainPage/메추리봇.png"
@@ -128,7 +150,10 @@ export default function MainPage() {
 
       {/* 다섯 번째 칸 */}
 
-      <div className="grid grid-cols-2 h-[80vh] w-[70vw] mx-auto">
+      <div
+        ref={fifthSectionRef}
+        className={`grid grid-cols-2 h-[80vh] w-[70vw] mx-auto opacity-0 ${fifthVisible ? 'animate-scroll-fade-in' : ''}`}
+      >
         <div className="col-span-1 flex flex-col mt-64">
           <div className="text-mainColor text-5xl text-left font-bold">메추리 지도</div>
           <div className="text-2xl text-left mt-10 leading-relaxed">
@@ -156,9 +181,9 @@ export default function MainPage() {
 
       {/* 여섯 번째 칸 */}
 
-      <div className="h-[20vh] w-screen mx-auto bg-gray-400 text-5xl text-center font-bold">
+      {/* <div className="h-[20vh] w-screen mx-auto bg-gray-400 text-5xl text-center font-bold">
         저작권 어쩌고 표시하는 곳
-      </div>
+      </div> */}
     </div>
   );
 }
