@@ -1,39 +1,31 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { MdRestaurantMenu } from 'react-icons/md';
+
 export default function NavBar() {
-  const components: { title: string; href: string; description: string }[] = [
-    // {
-    //   title: '홈',
-    //   href: '/main',
-    //   description: '메인 페이지입니다.',
-    // },
+  const navBarMenus: { title: string; href: string }[] = [
     {
       title: '룰렛 돌리기',
       href: '/roulette',
-      description:
-        'A modal dialog that interrupts the user with important content and expects a response.',
     },
     {
       title: '메뉴 추천 테스트',
       href: '/foodchoice',
-      description: 'For sighted users to preview content available behind a link.',
     },
     {
       title: '메추리 봇',
       href: '/mechuribot',
-      description:
-        'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
     },
     {
       title: '메추리 지도',
       href: '/map',
-      description: 'Visually or semantically separates content.',
     },
   ];
 
   return (
     <nav className="bg-[#f6f6f6] border-gray-200 dark:bg-gray-900 w-full h-16">
-      <div className="flex items-center h-full justify-between mx-20">
+      <div className="flex items-center h-full justify-between md:mx-20">
         <Link href="/main">
           <div className="flex gap-2">
             <span>
@@ -45,17 +37,39 @@ export default function NavBar() {
           </div>
         </Link>
 
-        <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border  rounded-lg  md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0  dark:border-gray-700">
-            {components.map((component, index) => (
-              <li key={component.href}>
-                <a
-                  href={component.href}
-                  className={`block py-2 px-3 rounded md:p-0 font-medium text-lg  
-                  ${index === 0 ? 'text-[#FF5A5F] ' : 'text-[#FF5A5F]'}`}
+        <details className="dropdown dropdown-bottom dropdown-end md:hidden">
+          <summary className="m-1 btn">
+            {' '}
+            <MdRestaurantMenu size={30} color="#FF5A5F" />
+          </summary>
+          <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-60">
+            {navBarMenus.map((navBarMenu, index) => (
+              <li key={navBarMenu.href}>
+                <Link
+                  href={navBarMenu.href}
+                  className="block py-2 px-3 rounded md:p-0 text-center text-lg  
+                  "
                 >
-                  {component.title}
-                </a>
+                  {navBarMenu.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </details>
+        <div
+          className={`
+           absolute top-full right-0 w-full hidden md:block md:static md:w-auto bg-backGroundColor dark:bg-gray-900`}
+          id="navbar-default"
+        >
+          <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border  rounded-lg  md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0  dark:border-gray-700">
+            {navBarMenus.map((navBarMenu, index) => (
+              <li key={navBarMenu.href}>
+                <Link
+                  href={navBarMenu.href}
+                  className="block py-2 px-3 rounded md:p-0 font-medium text-lg  text-mainColor"
+                >
+                  {navBarMenu.title}
+                </Link>
               </li>
             ))}
           </ul>

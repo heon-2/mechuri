@@ -4,13 +4,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import useScrollVisible from '@/hooks/useScrollVisible';
 export default function MainPage() {
-  const firstSectionRef = useRef<HTMLDivElement>(null);
   const secondSectionRef = useRef<HTMLDivElement>(null);
   const thirdSectionRef = useRef<HTMLDivElement>(null);
   const fourthSectionRef = useRef<HTMLDivElement>(null);
   const fifthSectionRef = useRef<HTMLDivElement>(null);
 
-  const firstVisible = useScrollVisible(firstSectionRef);
   const secondVisible = useScrollVisible(secondSectionRef);
   const thirdVisible = useScrollVisible(thirdSectionRef);
   const fourthVisible = useScrollVisible(fourthSectionRef);
@@ -21,10 +19,7 @@ export default function MainPage() {
   return (
     <div className=" bg-backGroundColor">
       {/* 첫 화면 칸 */}
-      <div
-        // ref={firstSectionRef}
-        className={`h-[calc(100vh-4rem)] relative`}
-      >
+      <div className={`h-[calc(100vh-4rem)] relative`}>
         {/* 이미지 */}
         <Image
           className="brightness-50 "
@@ -36,9 +31,13 @@ export default function MainPage() {
         ></Image>
         {/* 텍스트 - opacity-0 을 추가해야 텍스트가 없는 상태에서 fade-in 됨.*/}
         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center flex-col gap-14 opacity-0 animate-fade-in">
-          <div className="text-6xl font-bold text-white text-center ">오늘 뭐 먹지 ?</div>
-          <div className="text-6xl font-bold text-white text-center">
-            <span className="text-mainColor">메추리</span>가 대신 골라드릴게요 !
+          <div className="text-5xl md:text-6xl font-bold text-white text-center ">
+            오늘 뭐 먹지 ?
+          </div>
+          <div className="text-5xl md:text-6xl font-bold text-white text-center leading-tight ">
+            <span className="text-mainColor">메추리</span>가
+            <span className="block md:inline "> </span>
+            대신 골라드릴게요 !
           </div>
           <div
             className="h-10 w-14 relative top-52 animate-bounce cursor-pointer"
@@ -181,9 +180,20 @@ export default function MainPage() {
 
       {/* 여섯 번째 칸 */}
 
-      {/* <div className="h-[20vh] w-screen mx-auto bg-gray-400 text-5xl text-center font-bold">
-        저작권 어쩌고 표시하는 곳
-      </div> */}
+      <div className="flex flex-col h-[20vh] w-screen bg-gray-300  text-center font-bold">
+        <div className="text-3xl">메뉴 추천 리스트, 메추리</div>
+        <div className="text-xl">
+          메추리는 여러분들에게 가볍게 메뉴 추천을 해주고자 만들었습니다.
+        </div>
+        <div className="text-xl">
+          저희 서비스를 이용하시다가 불편한 점이 있었다면,
+          <br /> 아래 남겨진 메일 중 한 곳으로 피드백을 남겨주시면 더욱 더 발전하는 메추리가
+          되겠습니다.
+        </div>
+        <div>[ E-mail ]</div>
+        <div>개발자1 : @heonxyz@gmail.com</div>
+        <div>개발자2 : @cjjss11@naver.com</div>
+      </div>
     </div>
   );
 }
