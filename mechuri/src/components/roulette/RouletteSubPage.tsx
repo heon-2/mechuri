@@ -20,17 +20,17 @@ export default function RouletteSubPage() {
   });
 
   return (
-    <div className="grid grid-cols-3 items-center justify-center h-[calc(100vh-4rem)] bg-[#f6f6f6]">
+    <div className="grid grid-cols-1 md:grid-cols-5 items-center justify-center h-[calc(100vh-4rem)] bg-[#f6f6f6]">
       {isLoading ? (
-        <div className="col-span-3">
+        <div className="col-span-5">
           <LoadingUi></LoadingUi>
         </div>
       ) : (
         <>
-          <div className="flex justify-center items-center h-3/4">
+          <div className="flex col-span-full md:col-span-2 justify-center items-center h-3/4">
             <Select></Select>
           </div>
-          <div className="col-span-2">
+          <div className="flex col-span-full md:col-span-3">
             <Roulette data={data}></Roulette>
           </div>
         </>
