@@ -28,10 +28,20 @@ export default function Roulette({ data }: RouletteProps) {
   const [rouletteData, setRouletteData] = useState<FoodData[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [selectedItem, setSelectedItem] = useState<FoodData | null>(null);
-  const [rouletteSize, setRouletteSize] = useState<number>(10); // 룰렛 칸 개수 초기값 설정
+  const [rouletteSize, setRouletteSize] = useState<number>(8); // 룰렛 칸 개수 초기값 설정
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectCategory, setSelectCategory] = useRecoilState(categoryState);
-  const colors = ['#FF8989', '#FFC7C7', '#FCAEAE', '#FFE2E2', '#FFB4B4'];
+  // const colors = ['#FFE375', '#FFFFFF', '#FFF9B6', '#FFFFFF', '#FFE699', '#FFFFFF'];
+  const colors = [
+    '#FFFACD',
+    '#FFFFFF',
+    '#FFF8DC',
+    '#FFFFFF',
+    '#FADFAD',
+    '#FFFFFF',
+    '#F7E7CE',
+    '#FFFFFF',
+  ];
   const [canvasSize, setCanvasSize] = useState<any>({ width: 500, height: 500 });
 
   // useEffect(() => {
@@ -87,7 +97,7 @@ export default function Roulette({ data }: RouletteProps) {
 
   const resetRoulette = () => {
     setSelectCategory('');
-    setRouletteSize(10);
+    setRouletteSize(8);
     randomDataRoulette();
     setSelectedItem(null);
   };
@@ -126,7 +136,7 @@ export default function Roulette({ data }: RouletteProps) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const fontSize = canvasSize.width / 28;
+    const fontSize = canvasSize.width / 25;
     ctx.font = `${fontSize}px Arial`;
 
     rouletteData.forEach((item, i) => {
@@ -146,17 +156,21 @@ export default function Roulette({ data }: RouletteProps) {
         ch + (Math.sin(arc * i + arc / 2) * radius) / 1.5,
       );
       ctx.rotate(arc * i + arc / 2 + Math.PI / 2);
-      ctx.fillText(item.name, -ctx.measureText(item.name).width / 2, 0);
+
+      // ctx.fillText(item.name, -ctx.measureText(item.name).width / 2, 0);
+      const words = item.name.split(' ');
+      const lineHeight = fontSize * 1.2;
+      for (let j = 0; j < words.length; j++) {
+        ctx.fillText(words[j], -ctx.measureText(words[j]).width / 2, j * lineHeight);
+      }
       ctx.restore();
     });
-    for (let i = 0; i < rouletteData.length; i++) {
-      ctx.beginPath();
-      ctx.moveTo(cw, ch);
-      ctx.arc(cw, ch, radius, arc * i, arc * (i + 1), false);
-      ctx.lineWidth = 3; // 선의 두께를 지정합니다.
-      ctx.strokeStyle = 'black'; // 선의 색상을 지정합니다.
-      ctx.stroke();
-    }
+
+    ctx.beginPath();
+    ctx.arc(cw, ch, radius, 0, Math.PI * 2, false);
+    ctx.lineWidth = 15; // 테두리의 두께
+    ctx.strokeStyle = '#FFCD78'; // 테두리의 색깔을 설정
+    ctx.stroke();
 
     drawCenterCircle();
   };
@@ -168,11 +182,16 @@ export default function Roulette({ data }: RouletteProps) {
     if (!ctx) return;
 
     const [cw, ch] = [canvas.width / 2, canvas.height / 2];
-    const centerRadius = 30; // 중앙 원의 반지름, 크기는 적절히 조정할 수 있음
+    const centerRadius = 50; // 중앙 원의 반지름, 크기는 적절히 조정할 수 있음
 
     ctx.beginPath();
     ctx.arc(cw, ch, centerRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = 'black'; // 중앙 원의 색상, 필요에 따라 변경 가능
+    ctx.shadowBlur = 10; // 그림자의 흐림 정도
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // 그림자 색상, 반투명 검정
+    ctx.shadowOffsetX = 0; // 그림자의 x축 오프셋
+    ctx.shadowOffsetY = 4; // 그림자의 y축 오프셋, 아래쪽으로 그림자가 생기도록
+
+    ctx.fillStyle = 'white'; // 중앙 원의 색상, 필요에 따라 변경 가능
     ctx.fill();
   };
 
@@ -189,7 +208,7 @@ export default function Roulette({ data }: RouletteProps) {
       const ran = Math.floor(Math.random() * rouletteSize);
       const arc = 360 / rouletteSize;
       let offset;
-      if (7 < rouletteSize && rouletteSize <= 10) {
+      if (7 < rouletteSize && rouletteSize <= 8) {
         offset = -arc / 2 - arc;
       } else if (4 < rouletteSize && rouletteSize <= 7) {
         offset = -arc / 2 - arc / 2;
@@ -208,7 +227,7 @@ export default function Roulette({ data }: RouletteProps) {
   };
 
   const addItems = () => {
-    setRouletteSize((prev) => Math.min(10, prev + 1));
+    setRouletteSize((prev) => Math.min(8, prev + 1));
   };
 
   const removeItems = () => {
@@ -216,20 +235,19 @@ export default function Roulette({ data }: RouletteProps) {
   };
 
   return (
-    <div className="flex justify-between items-center">
-      {/* {isLoading ? (
-        <LoadingUi></LoadingUi>
-      ) : (
-        <> */}
-      {/* 룰렛과 버튼들 그리드 짜기 */}
-      <div className="flex flex-col items-center justify-center roulette-container relative ml-6">
-        <canvas className="relative z-10" ref={canvasRef} />
+    <div className="flex items-center">
+      <div className="flex flex-col items-center justify-center roulette-container relative">
+        <canvas
+          className="relative z-10"
+          ref={canvasRef}
+          style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto' }}
+        />
         <div className="absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <button
             onClick={rotate}
-            className="bg-[#FF856B] text-white text-xl w-20 h-20 rounded-full "
+            className="bg-[#FFCD78] text-white text-xl w-20 h-20 rounded-full "
           >
-            SPIN
+            START
           </button>
         </div>
         <Image
@@ -240,19 +258,8 @@ export default function Roulette({ data }: RouletteProps) {
           className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-20 ml-10 rotate-[15deg]"
           style={{ marginTop: '-20px' }}
         ></Image>
-        {/* <div className="justify-around mt-4 z-10">
-          <button
-            onClick={rotate}
-            className="bg-blue-500 text-white px-5 py-2 rounded-md mr-2 ml-2"
-          >
-            SPIN
-          </button>
-          <button onClick={resetRoulette} className="bg-red-500 text-white px-4 py-2 rounded-md ">
-            RESET
-          </button>
-        </div> */}
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 ml-28">
         <button
           onClick={resetRoulette}
           className="bg-[#FF856B] text-white text-xl px-4 py-2 rounded-md "
@@ -262,14 +269,14 @@ export default function Roulette({ data }: RouletteProps) {
         <div className="flex justify-center items-center z-10">
           <button
             onClick={removeItems}
-            className="bg-green-500 text-white w-12 h-12 rounded-md mr-2 text-4xl "
+            className="bg-[#FFCD78] text-white w-12 h-12 rounded-md mr-2 text-4xl "
           >
             -
           </button>
-          <p className="mr-2 text-3xl">{rouletteSize}/10</p>
+          <p className="mr-2 text-3xl">{rouletteSize}/8</p>
           <button
             onClick={addItems}
-            className="bg-yellow-500 text-white w-12 h-12 rounded-md text-4xl"
+            className="bg-[#FFCD78] text-white w-12 h-12 rounded-md text-4xl"
           >
             +
           </button>

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Image from 'next/image';
 import { FoodData } from '@/components/roulette/Roulette';
 import { useRouter } from 'next/navigation';
 import {
@@ -31,13 +32,15 @@ export default function ResultModal({ onClose, result, open }: ResultModalProps)
             <AlertDialogTitle className="flex justify-center text-3xl fond-bold mb-4">
               오늘의 추천 메뉴는?
             </AlertDialogTitle>
-            <div className="flex justify-center">
+            <div className="flex justify-center relative w-5/6 aspect-[40/31] my-4 mx-auto">
               {result?.imageUrl && (
-                <img
+                <Image
                   src={result.imageUrl}
                   alt={result.name}
-                  className="w-5/6 aspect-[40/31] my-4 rounded-3xl"
-                ></img>
+                  fill
+                  sizes="(min-width: 700px) 33vw, 100vw"
+                  className="rounded-3xl"
+                ></Image>
               )}
             </div>
             <AlertDialogDescription className="flex justify-center text-xl">
