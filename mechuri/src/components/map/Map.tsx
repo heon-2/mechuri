@@ -19,7 +19,9 @@ export default function Map() {
   const setCurrentLat = useSetRecoilState(currentLatState);
   const setCurrentLng = useSetRecoilState(currentLngState);
   const [isSearchFolder, setIsSearchFolder] = useState<boolean>(true);
+  const [showSearch, setShowSearch] = useState<boolean>(false);
 
+  // TODO: 서버와 카카오 맵 API가 통신할 수 있게 수정해서 클라이언트에서 API-KEY 숨기기
   useEffect(() => {
     const mapScript = document.createElement('script');
     mapScript.async = true;
@@ -128,6 +130,10 @@ export default function Map() {
     });
   };
 
+  const toggleSearch = () => {
+    setShowSearch(!showSearch);
+  };
+
   const toggleSearchPlace = () => {
     setIsSearchFolder(!isSearchFolder);
   };
@@ -135,7 +141,6 @@ export default function Map() {
   return (
     <div className="relative w-screen h-[calc(100vh-4rem)]">
       <div id="map" className="w-full h-full overflow-hidden"></div>
-      {/* <button onClick={toggleSearchPlace} className="absolute z-20 top-1/2 left-1/3 h-16 bg-white"> */}
       {isSearchFolder ? (
         <button
           onClick={toggleSearchPlace}
@@ -161,10 +166,17 @@ export default function Map() {
         <SearchPlace map={map}></SearchPlace>
       </div>
 
-      {/* <div className="absolute top-3 right-20 z-10">
-        <Search onSearch={searchAddress}></Search>
-      </div> */}
-      <div className="absolute bottom-3 right-6 z-30 ">
+      <div className="absolute bottom-16 right-6 z-10">
+        <button onClick={toggleSearch} className="p-2 bg-white rounded-md shadow-lg">
+          <Image src="/images/searchIcon.png" alt="아이콘 이미지" width={30} height={30}></Image>
+        </button>
+      </div>
+      {showSearch && (
+        <div className="absolute bottom-16 right-20 z-10">
+          <Search onSearch={searchAddress}></Search>
+        </div>
+      )}
+      <div className="absolute bottom-3 right-6 z-10 ">
         <button onClick={setCurrentLocation} className="p-2 bg-white rounded-md shadow-lg">
           <Image src="/images/current.png" alt="currentLocation" width={30} height={30}></Image>
         </button>
