@@ -17,6 +17,8 @@ export default function MainPage() {
     secondSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
   return (
+    // TODO: 각 칸마다 컴포넌트화해서 분리하기
+    // TODO: 반응형 뷰포트 기준 정하기. (현재, Tailwind CSS 기준 md)
     <div className=" bg-backGroundColor">
       {/* 첫 화면 칸 */}
       <div className={`h-[calc(100vh-4rem)] relative`}>
