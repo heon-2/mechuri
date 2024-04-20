@@ -2,26 +2,10 @@
 import React from 'react';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { INITIAL_MESSAGE, DEFAULT_REQUEST_MESSAGE } from '@/constants/MECHURI_BOT';
 export default function ChatContent() {
-  // 초기 데이터
-  // TODO: 초기 데이터 Constant에 분리시키기.
-  const [chat, setChat] = useState([
-    {
-      message: '안녕하세요👋 여러분의 메뉴 고민을 해소시켜 줄 메추리봇이에요.',
-      sender: 'bot',
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    },
-    {
-      message: '오늘의 기분을 10자 이상 적어주시면, 그에 맞는 메뉴를 추천해드릴게요 !',
-      sender: 'bot',
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    },
-  ]);
-  const [defaultMessage, setDefaultMessage] = useState(
-    '오늘 내 기분에 맞는 음식메뉴를 한 단어로 추천해줘. 결과는 추천음식/이유 형식으로 알려줘. 이유는 한 줄의 정갈한 문장으로 해줘.',
-  );
+  const [chat, setChat] = useState(INITIAL_MESSAGE);
   const [input, setInput] = useState('');
-
   // handleInput시 event의 타입은 any 말고도 이렇게 지정가능함.
   function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     setInput(e.target.value);
@@ -34,10 +18,12 @@ export default function ChatContent() {
     setInput(''); // 입력 필드 초기화
 
     // OpenAI API에 요청을 보내기 위한 데이터 준비
+    // TODO: 리퀘스트 부분은 상수니깐 따로 분리해보자.
+    // FIXME: 리퀘스트 바디가 이상함. API 문서 보고 다시 정리.
     const reqBody = {
       model: 'gpt-3.5-turbo',
       messages: [
-        { role: 'user', content: defaultMessage },
+        { role: 'user', content: DEFAULT_REQUEST_MESSAGE },
         { role: 'system', content: 'You are a Someone who recommends a food menu' },
       ],
       temperature: 0.4,
@@ -61,6 +47,7 @@ export default function ChatContent() {
   const { mutate, isPending } = useMutation({
     mutationFn: handleSend,
     onSuccess(data) {
+      // TODO: 데이터를 파싱하는 로직을 따로 빼자.
       const botReply = data.choices[0].message.content.trim();
       const parts = botReply.split('/');
       const recommendedFood = parts[0].trim(); // 추천 음식
