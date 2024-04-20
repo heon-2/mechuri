@@ -1,7 +1,7 @@
 import React from 'react';
 export default function ChatHeader() {
   return (
-    <div className="mt-10 w-2/5 h-24 bg-mainColor shadow-md rounded-t-2xl flex items-center">
+    <div className="mt-5 lg:mt-10 w-full lg:w-2/5 h-24 bg-mainColor shadow-md rounded-t-2xl flex items-center">
       <img
         src="/images/logo1.png"
         alt="Chatbot"

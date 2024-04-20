@@ -1,11 +1,10 @@
 'use client';
 import React from 'react';
-import { useState, useEffect } from 'react';
-import OpenAI from 'openai';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 export default function ChatContent() {
-  const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_APIKEY as String;
   // 초기 데이터
+  // TODO: 초기 데이터 Constant에 분리시키기.
   const [chat, setChat] = useState([
     {
       message: '안녕하세요👋 여러분의 메뉴 고민을 해소시켜 줄 메추리봇이에요.',
@@ -59,7 +58,7 @@ export default function ChatContent() {
     return response.json();
   }
 
-  const { mutate, isPending, isError } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: handleSend,
     onSuccess(data) {
       const botReply = data.choices[0].message.content.trim();
@@ -89,7 +88,7 @@ export default function ChatContent() {
     },
   });
   return (
-    <div className="flex flex-col h-4/5 w-2/5 ">
+    <div className="flex flex-col h-5/6 lg:h-4/5 w-full lg:w-2/5 ">
       <div className="flex-grow overflow-auto bg-white">
         {chat.map((c, index) => (
           <div
@@ -108,7 +107,9 @@ export default function ChatContent() {
               {c.sender === 'bot' ? '메추리봇' : '사용자'}
               <time className="text-xs opacity-50 ml-1">{c.time}</time>
             </div>
-            <div className={`chat-bubble ${c.sender === 'bot' ? '' : 'bg-mainColor'} max-w-[75%]`}>
+            <div
+              className={`chat-bubble ${c.sender === 'bot' ? '' : 'bg-mainColor'} text-sm lg:text-base max-w-[75%]`}
+            >
               {c.message}
             </div>
           </div>
@@ -134,6 +135,9 @@ export default function ChatContent() {
         >
           {isPending ? '응답중...' : '전송'}
         </button>
+      </div>
+      <div className=" text-center text-xs text-gray-400">
+        MechuriBot can make mistakes. Please use it as a light reference.
       </div>
     </div>
   );
