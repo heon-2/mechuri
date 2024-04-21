@@ -22,7 +22,7 @@ interface ResultFoodData {
 export default function FoodChoiceResult({ resultData }: FoodChoiceResultProps) {
   return (
     <div className="flex justify-center items-center h-full w-screen">
-      <div className="card w-1/4 h-5/6 glass ">
+      <div className="card w-full lg:w-1/4 h-5/6 glass ">
         <figure className="h-1/2">
           <div className="relative h-full aspect-[4/3]">
             <Image
@@ -54,13 +54,13 @@ export default function FoodChoiceResult({ resultData }: FoodChoiceResultProps) 
                 </a>
               )}
             </div> */}
-            <div>
+            {/* <div>
               <Link href="/main" passHref>
                 <button className="btn bg-mainColor text-white">
                   {resultData && resultData.name} 음식점 찾기
                 </button>
               </Link>
-            </div>
+            </div> */}
             <div className="flex flex-row justify-center gap-0">
               <Link href="/main" passHref>
                 <button className="btn bg-mainColor text-white">홈으로 이동</button>

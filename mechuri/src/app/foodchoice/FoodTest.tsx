@@ -90,7 +90,7 @@ export default function FoodTest() {
         <>
           {/* 질문 표시 */}
           {currentQuestion && (
-            <div className="row-span-1 flex items-center justify-center w-screen font-bold text-3xl lg:text-5xl text-center">
+            <div className="row-span-1 flex items-center justify-center mx-auto w-4/5 font-bold text-3xl lg:text-5xl text-center">
               Q{step}. {currentQuestion?.Question?.longQuestion}
             </div>
           )}
@@ -98,26 +98,26 @@ export default function FoodTest() {
           {/* 선택지 */}
           <div className="row-span-3 flex items-center justify-center">
             <div
-              className={`flex flex-col lg:flex-row w-4/5 lg:w-3/5 ${currentQuestion?.Answers?.length!! > 3 ? 'h-1/2' : 'h-4/5'} lg:justify-around `}
+              className={`flex  lg:gap-2 flex-col lg:flex-row w-2/5 lg:w-3/5 ${currentQuestion?.Answers?.length!! > 3 ? 'h-full gap-4 lg:h-1/2' : 'gap-10 h-4/5'} justify-center  lg:justify-around `}
             >
               {currentQuestion?.Answers?.map((answer, idx) => (
                 <div
                   key={idx}
-                  className="flex  justify-center items-center cursor-pointer   hover:scale-105 transition-all duration-300 ease-in-out bg-backGroundColor rounded-2xl shadow-2xl"
+                  className="flex  justify-center items-center cursor-pointer   lg:hover:scale-105 transition-all duration-300 ease-in-out bg-backGroundColor rounded-2xl shadow-xl lg:shadow-2xl "
                   style={{ flexBasis: `${80 / currentQuestion?.Answers?.length}%` }}
                   onClick={() => handleClick(answer.answerId)}
                 >
-                  <div className="h-full w-full flex flex-col items-center justify-center gap-4 lg:gap-10">
+                  <div className="h-full w-full flex flex-col items-center justify-center gap-2 lg:gap-10">
                     {answer.image && (
                       <Image
-                        className="rounded-xl h-2/3 aspect-[4/3]"
+                        className="rounded-xl h-4/5 lg:h-2/3 aspect-[4/3]"
                         src={answer.image}
                         alt="음식 사진"
                         width={350}
                         height={200}
                       />
                     )}
-                    <div className="font-semibold text-2xl lg:text-4xl text-gray-800">
+                    <div className="font-semibold text-xl lg:text-4xl text-gray-800">
                       {answer.longAnswer}
                     </div>
                   </div>
