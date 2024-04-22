@@ -19,11 +19,10 @@ export default function ChatContent() {
 
     // OpenAI API에 요청을 보내기 위한 데이터 준비
     // TODO: 리퀘스트 부분은 상수니깐 따로 분리해보자.
-    // FIXME: 리퀘스트 바디가 이상함. API 문서 보고 다시 정리.
     const reqBody = {
       model: 'gpt-3.5-turbo',
       messages: [
-        { role: 'user', content: DEFAULT_REQUEST_MESSAGE },
+        { role: 'user', content: DEFAULT_REQUEST_MESSAGE + input },
         { role: 'system', content: 'You are a Someone who recommends a food menu' },
       ],
       temperature: 0.4,
@@ -52,7 +51,7 @@ export default function ChatContent() {
       const parts = botReply.split('/');
       const recommendedFood = parts[0].trim(); // 추천 음식
       const reason = parts[1].trim(); // 이유
-      const finalReply = `오늘의 메추리봇 추천 음식은 ${recommendedFood}입니다😊 ${reason}`;
+      const finalReply = `메추리봇 추천 음식은 ${recommendedFood}입니다😊\n${reason}`;
       // 챗봇의 답변을 채팅에 추가
       setChat((chat) => [
         ...chat,
@@ -95,7 +94,7 @@ export default function ChatContent() {
               <time className="text-xs opacity-50 ml-1">{c.time}</time>
             </div>
             <div
-              className={`chat-bubble ${c.sender === 'bot' ? '' : 'bg-mainColor'} text-sm lg:text-base max-w-[75%]`}
+              className={`chat-bubble ${c.sender === 'bot' ? '' : 'bg-mainColor'} text-sm lg:text-base max-w-[75%] whitespace-pre-wrap`}
             >
               {c.message}
             </div>
