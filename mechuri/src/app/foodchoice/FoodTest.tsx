@@ -43,7 +43,6 @@ export default function FoodTest() {
       router.push(`/foodchoice/result/${resultFoodId}`);
     }
   };
-
   const getQuestionnaire = async () => {
     const response = await fetch('/api/foodchoice');
     if (!response.ok) {
@@ -57,6 +56,7 @@ export default function FoodTest() {
   });
 
   const totalStep = questionnaire?.length ?? 0; // 전체 질문 개수.
+  const currentQuestion = questionnaire?.[step - 1];
   const router = useRouter();
   useEffect(() => {
     // 모든 질문에 대한 답변이 완료되었을 때만 서버로 데이터를 전송
@@ -81,9 +81,8 @@ export default function FoodTest() {
       setStep((currentStep) => currentStep + 1);
     }
   };
-  const currentQuestion = questionnaire?.[step - 1];
   return (
-    // calc을 사용한 높이 조절 -> 3rem은 NavBar의 높이
+    // calc을 사용한 높이 조절 -> 4rem은 NavBar의 높이
     <div className="grid grid-rows-5 w-screen h-[calc(100%-4rem)]">
       {isLoading ? (
         <LoadingUi />
@@ -91,7 +90,7 @@ export default function FoodTest() {
         <>
           {/* 질문 표시 */}
           {currentQuestion && (
-            <div className="row-span-1 flex items-center justify-center w-screen font-bold text-5xl text-text">
+            <div className="row-span-1 flex items-center justify-center mx-auto w-4/5 font-bold text-3xl lg:text-5xl text-center">
               Q{step}. {currentQuestion?.Question?.longQuestion}
             </div>
           )}
@@ -99,26 +98,28 @@ export default function FoodTest() {
           {/* 선택지 */}
           <div className="row-span-3 flex items-center justify-center">
             <div
-              className={`flex w-3/5 ${currentQuestion?.Answers?.length!! > 3 ? 'h-1/2' : 'h-4/5'} justify-around `}
+              className={`flex  lg:gap-2 flex-col lg:flex-row w-2/5 lg:w-3/5 ${currentQuestion?.Answers?.length!! > 3 ? 'h-full gap-4 lg:h-1/2' : 'gap-10 h-4/5'} justify-center  lg:justify-around `}
             >
               {currentQuestion?.Answers?.map((answer, idx) => (
                 <div
                   key={idx}
-                  className="flex  justify-center items-center cursor-pointer   hover:scale-105 transition-all duration-300 ease-in-out bg-backGroundColor rounded-2xl shadow-2xl"
+                  className="flex  justify-center items-center cursor-pointer   lg:hover:scale-105 transition-all duration-300 ease-in-out bg-backGroundColor rounded-2xl shadow-xl lg:shadow-2xl "
                   style={{ flexBasis: `${80 / currentQuestion?.Answers?.length}%` }}
                   onClick={() => handleClick(answer.answerId)}
                 >
-                  <div className="h-full w-full flex flex-col items-center justify-center gap-10">
+                  <div className="h-full w-full flex flex-col items-center justify-center gap-2 lg:gap-10">
                     {answer.image && (
                       <Image
-                        className="rounded-xl h-2/3 aspect-[4/3]"
+                        className="rounded-xl h-4/5 lg:h-2/3 aspect-[4/3]"
                         src={answer.image}
-                        alt="Description"
+                        alt="음식 사진"
                         width={350}
                         height={200}
                       />
                     )}
-                    <div className="font-semibold text-4xl text-gray-800">{answer.longAnswer}</div>
+                    <div className="font-semibold text-xl lg:text-4xl text-gray-800">
+                      {answer.longAnswer}
+                    </div>
                   </div>
                 </div>
               ))}

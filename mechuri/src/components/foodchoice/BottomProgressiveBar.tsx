@@ -10,7 +10,7 @@ export default function BottomProgressiveBar({ step, totalStep }: BottomProgress
         {step} / {totalStep}
       </div>
       <progress
-        className="progress progress-error w-1/3 bg-[#F7DED0]"
+        className="progress progress-error w-2/3 lg:w-1/3 bg-[#F7DED0]"
         // className="progress progress-warning w-1/3 bg-mainColor"
         value={step}
         max={totalStep}

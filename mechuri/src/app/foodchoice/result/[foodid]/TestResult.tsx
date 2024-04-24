@@ -17,8 +17,6 @@ interface ResultPageProps {
 }
 import FoodChoiceResult from '@/components/foodchoice/foodchoiceresult/FoodChoiceResult';
 import { useQuery } from '@tanstack/react-query';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Result } from 'postcss';
 import LoadingUi from '@/components/commons/LoadingUi';
 import React, { useEffect, useState } from 'react';
 
