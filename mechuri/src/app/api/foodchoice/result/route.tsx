@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/connectDB'; // 연결 모듈 임포트
-
+export const dynamic = 'force-dynamic';
 // GET
 type foodId = string | number;
 export async function GET(request: NextRequest, response: NextResponse) {
