@@ -4,7 +4,6 @@ import { currentLatState, currentLngState } from '@/stores/atoms/mapState';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-// import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -45,8 +44,6 @@ export default function SearchPlace({ map }: PlaceSearchProps) {
   const [markers, setMakrers] = useState<any[]>([]);
   const currentLat = useRecoilValue(currentLatState);
   const currentLng = useRecoilValue(currentLngState);
-  // const searchParams = useSearchParams();
-  // const search = searchParams.get('search');
   const [selectedMarker, setSelectedMarker] = useState<any>(null);
   const [infoWindow, setInfoWindow] = useState<any>(null);
   const [isSearch, setIsSearch] = useState<boolean>(false);
