@@ -54,10 +54,7 @@ export default function ResultModal({ onClose, result, open }: ResultModalProps)
                 다시하기
               </AlertDialogCancel>
               <Link href="/map">
-                <AlertDialogAction
-                  // onClick={() => router.push(`/map?search=${result?.name}`)}
-                  className="w-40 rounded-lg bg-[#FF856B]"
-                >
+                <AlertDialogAction className="w-40 rounded-lg bg-[#FF856B]">
                   음식점 찾기
                 </AlertDialogAction>
               </Link>
