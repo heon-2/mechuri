@@ -6,6 +6,7 @@ import SearchPlace from './SearchPlace';
 import { useSetRecoilState } from 'recoil';
 import { currentLatState, currentLngState } from '@/stores/atoms/mapState';
 import Image from 'next/image';
+import { Suspense } from 'react';
 
 declare global {
   interface Window {
@@ -163,7 +164,9 @@ export default function Map() {
       <div
         className={`bg-[#fff] w-1/3 h-full overflow-y-auto flex-grow absolute top-0 left-0 z-10 ${isSearchFolder ? '' : 'hidden'}`}
       >
-        <SearchPlace map={map}></SearchPlace>
+        <Suspense fallback={<div>Loading...</div>}>
+          <SearchPlace map={map}></SearchPlace>
+        </Suspense>
       </div>
 
       <div className="absolute bottom-16 right-6 z-10">
