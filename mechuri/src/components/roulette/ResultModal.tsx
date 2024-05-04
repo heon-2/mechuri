@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { FoodData } from '@/components/roulette/Roulette';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -52,12 +53,14 @@ export default function ResultModal({ onClose, result, open }: ResultModalProps)
               <AlertDialogCancel onClick={onClose} className="w-40 rounded-lg">
                 다시하기
               </AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => router.push(`/map?search=${result?.name}`)}
-                className="w-40 rounded-lg bg-[#FF856B]"
-              >
-                음식점 찾기
-              </AlertDialogAction>
+              <Link href="/map">
+                <AlertDialogAction
+                  // onClick={() => router.push(`/map?search=${result?.name}`)}
+                  className="w-40 rounded-lg bg-[#FF856B]"
+                >
+                  음식점 찾기
+                </AlertDialogAction>
+              </Link>
             </AlertDialogFooter>
           </div>
         </AlertDialogContent>
