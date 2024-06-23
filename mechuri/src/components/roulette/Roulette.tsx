@@ -235,7 +235,7 @@ export default function Roulette({ data }: RouletteProps) {
   };
 
   return (
-    <div className="flex items-center">
+    <div className="flex flex-col md:flex-row items-center">
       <div className="flex flex-col items-center justify-center roulette-container relative">
         <canvas
           className="relative z-10"
