@@ -109,13 +109,18 @@ export default function FoodTest() {
                 >
                   <div className="h-full w-full flex flex-col items-center justify-center gap-2 lg:gap-10">
                     {answer.image && (
-                      <Image
+                      // <Image
+                      //   className="rounded-xl h-4/5 lg:h-2/3 aspect-[4/3]"
+                      //   src={answer.image}
+                      //   alt="음식 사진"
+                      //   width={350}
+                      //   height={200}
+                      // />
+                      <img
                         className="rounded-xl h-4/5 lg:h-2/3 aspect-[4/3]"
                         src={answer.image}
                         alt="음식 사진"
-                        width={350}
-                        height={200}
-                      />
+                      ></img>
                     )}
                     <div className="font-semibold text-xl lg:text-4xl text-gray-800">
                       {answer.longAnswer}
