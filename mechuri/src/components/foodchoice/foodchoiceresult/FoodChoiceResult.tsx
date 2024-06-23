@@ -25,12 +25,13 @@ export default function FoodChoiceResult({ resultData }: FoodChoiceResultProps) 
       <div className="card w-full lg:w-1/4 h-5/6 glass ">
         <figure className="h-1/2">
           <div className="relative h-full aspect-[4/3]">
-            <Image
+            {/* <Image
               src={resultData?.imageUrl!!}
               alt="Description"
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw"
-            />
+            /> */}
+            <img className="h-full w-full" src={resultData?.imageUrl!!} alt="Description"></img>
           </div>
         </figure>
         <div className="card-body flex justify-evenly">
