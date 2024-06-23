@@ -15,7 +15,7 @@ export default function Select() {
   console.log(category);
 
   return (
-    <div className="bg-white w-1/2 h-full grid grid-rows-3 grid-cols-2 divide-x divide-y border-2 border-[#FFDCDC]">
+    <div className="bg-white w-1/2 h-full grid grid-rows-2 md:grid-rows-3 grid-cols-3 md:grid-cols-2 divide-x divide-y border-2 border-[#FFDCDC]">
       {['korean', 'japanese', 'western', 'chinese', 'snack', 'dessert'].map((food, idx) => (
         <div
           key={food}
@@ -24,7 +24,15 @@ export default function Select() {
           }`}
           onClick={() => selectCategory(food)}
         >
-          <Image src={`/images/${food}.png`} alt={`${food} food`} width={70} height={70}></Image>
+          <div className="w-16 h-16 md:w-20 md:h-20">
+            <Image
+              src={`/images/${food}.png`}
+              alt={`${food} food`}
+              width={100}
+              height={100}
+              className="object-contain"
+            ></Image>
+          </div>
           <p className="mt-2">
             {food === 'korean'
               ? '한식'
