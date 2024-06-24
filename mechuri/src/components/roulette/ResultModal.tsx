@@ -35,14 +35,15 @@ export default function ResultModal({ onClose, result, open }: ResultModalProps)
             </AlertDialogTitle>
             <div className="flex justify-center relative w-5/6 aspect-[40/31] my-4 mx-auto">
               {result?.imageUrl && (
-                // <Image
-                //   src={result.imageUrl}
-                //   alt={result.name}
-                //   fill
-                //   sizes="(min-width: 700px) 33vw, 100vw"
-                //   className="rounded-3xl"
-                // ></Image>
-                <img className="h-full w-full" src={result.imageUrl} alt={result.name} />
+                <Image
+                  src={result.imageUrl}
+                  alt={result.name}
+                  fill
+                  sizes="(min-width: 700px) 33vw, 100vw"
+                  className="rounded-3xl"
+                  priority={true}
+                ></Image>
+                // <img className="h-full w-full" src={result.imageUrl} alt={result.name} />
               )}
             </div>
             <AlertDialogDescription className="flex justify-center text-xl">
